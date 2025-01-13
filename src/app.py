@@ -333,6 +333,15 @@ class App(ctk.CTk):
             width=120
         )
         self.btn_editar.pack(side="left", padx=5)
+        
+        # Botão Ocorrências
+        self.btn_ocorrencias = ctk.CTkButton(
+            self.frame_botoes,
+            text="Ocorrências",
+            command=self.abrir_ocorrencias,
+            width=120
+        )
+        self.btn_ocorrencias.pack(side="left", padx=5)
 
     def salvar_funcionario(self):
         # Cria um dicionário com os dados das entradas
@@ -515,6 +524,11 @@ class App(ctk.CTk):
             
         except Exception as e:
             self.mostrar_mensagem("Erro", f"Erro ao carregar dados do funcionário: {str(e)}")
+
+    def abrir_ocorrencias(self):
+        from ocorrencias import JanelaOcorrencias
+        janela_ocorrencias = JanelaOcorrencias(self, self.db)
+        janela_ocorrencias.grab_set()  # Torna a janela modal
 
 if __name__ == "__main__":
     app = App()

@@ -22,6 +22,7 @@ class Database:
         self.criar_tabela()
     
     def criar_tabela(self):
+        # Tabela de funcionários (já existente)
         self.cursor.execute("""
         CREATE TABLE IF NOT EXISTS funcionarios (
             mat TEXT PRIMARY KEY,
@@ -48,6 +49,25 @@ class Database:
             observacoes TEXT
         )
         """)
+
+        # Nova tabela de ocorrências
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS ocorrencias (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            data TEXT NOT NULL,
+            area TEXT NOT NULL,
+            turno TEXT NOT NULL,
+            matricula TEXT NOT NULL,
+            colaborador TEXT NOT NULL,
+            tipo_ausencia TEXT NOT NULL,
+            observacao TEXT,
+            justificado TEXT NOT NULL,
+            observacao2 TEXT,
+            tipo TEXT NOT NULL,
+            FOREIGN KEY (matricula) REFERENCES funcionarios(mat)
+        )
+        """)
+        
         self.conn.commit()
     
     def inserir(self, dados):
@@ -83,6 +103,34 @@ class Database:
     def deletar(self, mat):
         self.cursor.execute("DELETE FROM funcionarios WHERE mat=?", (mat,))
         self.conn.commit()
+    
+    def buscar_dados_funcionario_para_ocorrencia(self, matricula):
+        """Busca os dados relevantes do funcionário para a ocorrência"""
+        self.cursor.execute("""
+        SELECT mat, nome, area, turno 
+        FROM funcionarios 
+        WHERE mat = ?
+        """, (matricula,))
+        return self.cursor.fetchone()
+
+    def inserir_ocorrencia(self, dados):
+        """Insere uma nova ocorrência"""
+        self.cursor.execute("""
+        INSERT INTO ocorrencias (
+            data, area, turno, matricula, colaborador,
+            tipo_ausencia, observacao, justificado,
+            observacao2, tipo
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, dados)
+        self.conn.commit()
+
+    def buscar_ocorrencias(self, matricula=None):
+        """Busca ocorrências, opcionalmente filtradas por matrícula"""
+        if matricula:
+            self.cursor.execute("SELECT * FROM ocorrencias WHERE matricula = ?", (matricula,))
+        else:
+            self.cursor.execute("SELECT * FROM ocorrencias")
+        return self.cursor.fetchall()
     
     def __del__(self):
         self.conn.close()
