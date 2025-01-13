@@ -1,13 +1,23 @@
 import sqlite3
 from pathlib import Path
+import os
 
 class Database:
     def __init__(self):
+        # Obtém o diretório atual
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Define o caminho para o diretório data
+        data_dir = os.path.join(os.path.dirname(current_dir), 'data')
+        
         # Garante que o diretório data existe
-        Path("data").mkdir(exist_ok=True)
+        os.makedirs(data_dir, exist_ok=True)
+        
+        # Define o caminho completo para o banco de dados
+        db_path = os.path.join(data_dir, 'funcionarios.db')
         
         # Cria/conecta ao banco de dados
-        self.conn = sqlite3.connect('data/funcionarios.db')
+        self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
         self.criar_tabela()
     
@@ -34,7 +44,7 @@ class Database:
             num_rota TEXT,
             colete TEXT,
             sapato TEXT,
-            pcd BOOLEAN,
+            pcd TEXT,
             observacoes TEXT
         )
         """)
@@ -101,7 +111,9 @@ def teste_banco():
         "(11)88888-8888", # tel_recado
         "Rota 1",      # num_rota
         "M",           # colete
-        "42"           # sapato
+        "42",          # sapato
+        "Não",         # pcd
+        "Ativo"        # observacoes
     )
 
     print("\n=== Teste do Banco de Dados ===")
@@ -114,11 +126,11 @@ def teste_banco():
     except Exception as e:
         print(f"❌ Erro na inserção: {e}")
 
-    # Teste 2: Consulta todos
+    # Teste 2: Consulta total
     try:
-        print("\n2. Testando consulta geral...")
+        print("\n2. Testando consulta total...")
         funcionarios = db.buscar_todos()
-        print(f"✅ Consulta realizada com sucesso! {len(funcionarios)} registros encontrados.")
+        print(f"✅ {len(funcionarios)} registros encontrados.")
     except Exception as e:
         print(f"❌ Erro na consulta geral: {e}")
 

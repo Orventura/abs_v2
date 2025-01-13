@@ -2,6 +2,8 @@ import customtkinter as ctk
 from database import Database
 from tkcalendar import DateEntry
 import locale
+from datetime import datetime
+from tkinter import messagebox
 
 # Configurar locale para português
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
@@ -308,6 +310,84 @@ class App(ctk.CTk):
                 ctk.CTkLabel(frame_linha5, text="Referência").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['referencia'] = ctk.CTkEntry(frame_linha5)
                 self.entradas['referencia'].pack(fill="x", padx=5, pady=(0,5))
+
+        # Frame para botões (após os frames de dados)
+        self.frame_botoes = ctk.CTkFrame(self.frame_form)
+        self.frame_botoes.pack(fill="x", padx=10, pady=10)
+        
+        # Botão Salvar
+        self.btn_salvar = ctk.CTkButton(
+            self.frame_botoes,
+            text="Salvar",
+            command=self.salvar_funcionario,
+            width=120
+        )
+        self.btn_salvar.pack(side="left", padx=5)
+
+    def salvar_funcionario(self):
+        # Coletar todos os dados das entradas
+        dados = (
+            self.entradas['mat'].get(),                    # Matrícula
+            self.entradas['nome'].get(),                   # Nome
+            self.entradas['cargo'].get(),                  # Cargo
+            self.entradas['setor'].get(),                  # Setor
+            self.entradas['empresa'].get(),                # Empresa
+            self.entradas['turno'].get(),                  # Turno
+            self.entradas['area'].get(),                   # Área
+            self.entradas['lider'].get(),                  # Líder
+            self.entradas['dt_admissao'].get_date().strftime('%Y-%m-%d'),  # Data Admissão
+            self.entradas['dt_nascimento'].get_date().strftime('%Y-%m-%d'), # Data Nascimento
+            self.entradas['cpf'].get(),                    # CPF
+            self.entradas['email'].get(),                  # Email
+            self.entradas['endereco'].get(),               # Endereço
+            self.entradas['bairro'].get(),                 # Bairro
+            self.entradas['referencia'].get(),             # Referência
+            self.entradas['telefone'].get(),               # Telefone
+            self.entradas['tel_recado'].get(),             # Telefone Recado
+            self.entradas['num_rota'].get(),               # Número Rota
+            self.entradas['colete'].get(),                 # Colete
+            self.entradas['sapato'].get(),                 # Sapato
+            "Sim" if self.entradas['pcd'].get() else "Não",  # PCD
+            self.entradas['observacao'].get()              # Observações
+        )
+        
+        try:
+            # Verifica se já existe um funcionário com esta matrícula
+            funcionario_existente = self.db.buscar_por_matricula(dados[0])
+            
+            if funcionario_existente:
+                # Se existe, atualiza
+                self.db.atualizar(dados)
+                self.mostrar_mensagem("Sucesso", "Funcionário atualizado com sucesso!")
+            else:
+                # Se não existe, insere
+                self.db.inserir(dados)
+                self.mostrar_mensagem("Sucesso", "Funcionário cadastrado com sucesso!")
+                
+            # Limpa o formulário após salvar
+            self.limpar_formulario()
+            
+        except Exception as e:
+            self.mostrar_mensagem("Erro", f"Erro ao salvar funcionário: {str(e)}")
+    
+    def mostrar_mensagem(self, titulo, mensagem):
+        """Exibe uma mensagem para o usuário"""
+        if titulo == "Sucesso":
+            messagebox.showinfo(titulo, mensagem)
+        else:
+            messagebox.showerror(titulo, mensagem)
+    
+    def limpar_formulario(self):
+        """Limpa todos os campos do formulário"""
+        for chave, entrada in self.entradas.items():
+            if isinstance(entrada, ctk.CTkEntry):
+                entrada.delete(0, 'end')
+            elif isinstance(entrada, ctk.CTkComboBox):
+                entrada.set('')  # Para ComboBox, usamos set ao invés de delete
+            elif isinstance(entrada, ctk.CTkCheckBox):
+                entrada.deselect()
+            elif isinstance(entrada, DateEntry):
+                entrada.set_date(datetime.now())
 
 if __name__ == "__main__":
     app = App()
