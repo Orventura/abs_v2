@@ -4,6 +4,7 @@ from tkcalendar import DateEntry
 import locale
 from datetime import datetime
 from tkinter import messagebox
+from components import Validacoes
 
 # Configurar locale para português
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
@@ -323,45 +324,89 @@ class App(ctk.CTk):
             width=120
         )
         self.btn_salvar.pack(side="left", padx=5)
+        
+        # Botão Editar
+        self.btn_editar = ctk.CTkButton(
+            self.frame_botoes,
+            text="Editar",
+            command=self.editar_funcionario,
+            width=120
+        )
+        self.btn_editar.pack(side="left", padx=5)
 
     def salvar_funcionario(self):
-        # Coletar todos os dados das entradas
-        dados = (
-            self.entradas['mat'].get(),                    # Matrícula
-            self.entradas['nome'].get(),                   # Nome
-            self.entradas['cargo'].get(),                  # Cargo
-            self.entradas['setor'].get(),                  # Setor
-            self.entradas['empresa'].get(),                # Empresa
-            self.entradas['turno'].get(),                  # Turno
-            self.entradas['area'].get(),                   # Área
-            self.entradas['lider'].get(),                  # Líder
-            self.entradas['dt_admissao'].get_date().strftime('%Y-%m-%d'),  # Data Admissão
-            self.entradas['dt_nascimento'].get_date().strftime('%Y-%m-%d'), # Data Nascimento
-            self.entradas['cpf'].get(),                    # CPF
-            self.entradas['email'].get(),                  # Email
-            self.entradas['endereco'].get(),               # Endereço
-            self.entradas['bairro'].get(),                 # Bairro
-            self.entradas['referencia'].get(),             # Referência
-            self.entradas['telefone'].get(),               # Telefone
-            self.entradas['tel_recado'].get(),             # Telefone Recado
-            self.entradas['num_rota'].get(),               # Número Rota
-            self.entradas['colete'].get(),                 # Colete
-            self.entradas['sapato'].get(),                 # Sapato
-            "Sim" if self.entradas['pcd'].get() else "Não",  # PCD
-            self.entradas['observacao'].get()              # Observações
+        # Cria um dicionário com os dados das entradas
+        dados = {
+            'mat': self.entradas['mat'].get(),
+            'nome': self.entradas['nome'].get(),
+            'cargo': self.entradas['cargo'].get(),
+            'setor': self.entradas['setor'].get(),
+            'empresa': self.entradas['empresa'].get(),
+            'turno': self.entradas['turno'].get(),
+            'area': self.entradas['area'].get(),
+            'lider': self.entradas['lider'].get(),
+            'dt_admissao': self.entradas['dt_admissao'].get_date().strftime('%Y-%m-%d'),
+            'dt_nascimento': self.entradas['dt_nascimento'].get_date().strftime('%Y-%m-%d'),
+            'cpf': self.entradas['cpf'].get(),
+            'email': self.entradas['email'].get(),
+            'endereco': self.entradas['endereco'].get(),
+            'bairro': self.entradas['bairro'].get(),
+            'referencia': self.entradas['referencia'].get(),
+            'telefone': self.entradas['telefone'].get(),
+            'tel_recado': self.entradas['tel_recado'].get(),
+            'num_rota': self.entradas['num_rota'].get(),
+            'colete': self.entradas['colete'].get(),
+            'sapato': self.entradas['sapato'].get(),
+            'pcd': "Sim" if self.entradas['pcd'].get() else "Não",
+            'observacao': self.entradas['observacao'].get()
+        }
+        
+        # Validar campos obrigatórios
+        campos_vazios = Validacoes.validar_campos_obrigatorios(dados)
+        if campos_vazios:
+            self.mostrar_mensagem("Erro", f"Os seguintes campos são obrigatórios:\n{', '.join(campos_vazios)}")
+            return
+            
+        # Validar CPF
+        if not Validacoes.validar_cpf(dados['cpf']):
+            self.mostrar_mensagem("Erro", "CPF inválido!")
+            return
+            
+        # Validar email
+        if not Validacoes.validar_email(dados['email']):
+            self.mostrar_mensagem("Erro", "E-mail inválido!")
+            return
+            
+        # Validar telefones
+        if not Validacoes.validar_telefone(dados['telefone']):
+            self.mostrar_mensagem("Erro", "Telefone inválido!")
+            return
+            
+        if not Validacoes.validar_telefone(dados['tel_recado']):
+            self.mostrar_mensagem("Erro", "Telefone para recado inválido!")
+            return
+        
+        # Converter o dicionário em tupla na ordem correta para o banco
+        dados_tupla = (
+            dados['mat'], dados['nome'], dados['cargo'], dados['setor'],
+            dados['empresa'], dados['turno'], dados['area'], dados['lider'],
+            dados['dt_admissao'], dados['dt_nascimento'], dados['cpf'],
+            dados['email'], dados['endereco'], dados['bairro'], dados['referencia'],
+            dados['telefone'], dados['tel_recado'], dados['num_rota'],
+            dados['colete'], dados['sapato'], dados['pcd'], dados['observacao']
         )
         
         try:
             # Verifica se já existe um funcionário com esta matrícula
-            funcionario_existente = self.db.buscar_por_matricula(dados[0])
+            funcionario_existente = self.db.buscar_por_matricula(dados['mat'])
             
             if funcionario_existente:
                 # Se existe, atualiza
-                self.db.atualizar(dados)
+                self.db.atualizar(dados_tupla)
                 self.mostrar_mensagem("Sucesso", "Funcionário atualizado com sucesso!")
             else:
                 # Se não existe, insere
-                self.db.inserir(dados)
+                self.db.inserir(dados_tupla)
                 self.mostrar_mensagem("Sucesso", "Funcionário cadastrado com sucesso!")
                 
             # Limpa o formulário após salvar
@@ -388,6 +433,88 @@ class App(ctk.CTk):
                 entrada.deselect()
             elif isinstance(entrada, DateEntry):
                 entrada.set_date(datetime.now())
+
+    def editar_funcionario(self):
+        # Pegar a matrícula
+        matricula = self.entradas['mat'].get()
+        
+        # Verificar se a matrícula foi preenchida
+        if not matricula:
+            self.mostrar_mensagem("Erro", "Por favor, insira a matrícula do funcionário para editar.")
+            return
+            
+        # Buscar funcionário no banco
+        funcionario = self.db.buscar_por_matricula(matricula)
+        
+        # Verificar se encontrou o funcionário
+        if not funcionario:
+            self.mostrar_mensagem("Erro", "Funcionário não encontrado com esta matrícula.")
+            return
+            
+        try:
+            # Preencher os campos com os dados do funcionário
+            self.entradas['nome'].delete(0, 'end')
+            self.entradas['nome'].insert(0, funcionario[1])
+            
+            self.entradas['cargo'].delete(0, 'end')
+            self.entradas['cargo'].insert(0, funcionario[2])
+            
+            self.entradas['setor'].set(funcionario[3])
+            self.entradas['empresa'].set(funcionario[4])
+            self.entradas['turno'].set(funcionario[5])
+            self.entradas['area'].set(funcionario[6])
+            
+            self.entradas['lider'].delete(0, 'end')
+            self.entradas['lider'].insert(0, funcionario[7])
+            
+            # Converter string para data
+            dt_admissao = datetime.strptime(funcionario[8], '%Y-%m-%d')
+            dt_nascimento = datetime.strptime(funcionario[9], '%Y-%m-%d')
+            
+            self.entradas['dt_admissao'].set_date(dt_admissao)
+            self.entradas['dt_nascimento'].set_date(dt_nascimento)
+            
+            self.entradas['cpf'].delete(0, 'end')
+            self.entradas['cpf'].insert(0, funcionario[10])
+            
+            self.entradas['email'].delete(0, 'end')
+            self.entradas['email'].insert(0, funcionario[11])
+            
+            self.entradas['endereco'].delete(0, 'end')
+            self.entradas['endereco'].insert(0, funcionario[12])
+            
+            self.entradas['bairro'].delete(0, 'end')
+            self.entradas['bairro'].insert(0, funcionario[13])
+            
+            self.entradas['referencia'].delete(0, 'end')
+            self.entradas['referencia'].insert(0, funcionario[14])
+            
+            self.entradas['telefone'].delete(0, 'end')
+            self.entradas['telefone'].insert(0, funcionario[15])
+            
+            self.entradas['tel_recado'].delete(0, 'end')
+            self.entradas['tel_recado'].insert(0, funcionario[16])
+            
+            self.entradas['num_rota'].delete(0, 'end')
+            self.entradas['num_rota'].insert(0, funcionario[17])
+            
+            self.entradas['colete'].set(funcionario[18])
+            
+            self.entradas['sapato'].delete(0, 'end')
+            self.entradas['sapato'].insert(0, funcionario[19])
+            
+            # Configurar o checkbox PCD
+            if funcionario[20] == "Sim":
+                self.entradas['pcd'].select()
+            else:
+                self.entradas['pcd'].deselect()
+                
+            self.entradas['observacao'].set(funcionario[21])
+            
+            self.mostrar_mensagem("Sucesso", "Dados do funcionário carregados com sucesso!")
+            
+        except Exception as e:
+            self.mostrar_mensagem("Erro", f"Erro ao carregar dados do funcionário: {str(e)}")
 
 if __name__ == "__main__":
     app = App()
