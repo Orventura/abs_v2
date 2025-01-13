@@ -33,7 +33,9 @@ class Database:
             tel_recado TEXT,
             num_rota TEXT,
             colete TEXT,
-            sapato TEXT
+            sapato TEXT,
+            pcd BOOLEAN,
+            observacoes TEXT
         )
         """)
         self.conn.commit()
@@ -43,8 +45,9 @@ class Database:
         INSERT INTO funcionarios (
             mat, nome, cargo, setor, empresa, turno, area, lider,
             dt_admissao, dt_nascimento, cpf, email, endereco, bairro,
-            referencia, telefone, tel_recado, num_rota, colete, sapato
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            referencia, telefone, tel_recado, num_rota, colete, sapato,
+            pcd, observacoes
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, dados)
         self.conn.commit()
     
@@ -61,9 +64,10 @@ class Database:
         UPDATE funcionarios 
         SET nome=?, cargo=?, setor=?, empresa=?, turno=?, area=?, lider=?,
             dt_admissao=?, dt_nascimento=?, cpf=?, email=?, endereco=?, bairro=?,
-            referencia=?, telefone=?, tel_recado=?, num_rota=?, colete=?, sapato=?
+            referencia=?, telefone=?, tel_recado=?, num_rota=?, colete=?, sapato=?,
+            pcd=?, observacoes=?
         WHERE mat=?
-        """, dados[1:] + (dados[0],))  # Reorganiza para colocar matrícula no final
+        """, dados[1:] + (dados[0],))
         self.conn.commit()
     
     def deletar(self, mat):

@@ -47,17 +47,15 @@ class App(ctk.CTk):
         
         # Definição dos campos por seção
         campos = {
-            "Dados Funcionais": [
+            "Dados do Colaborador": [
                 ("Matrícula", "mat"),
                 ("Nome", "nome"),
                 ("CPF", "cpf"),
                 ("Cargo", "cargo")
             ],
-            "Informações Operacionais": [
+            "Contatos e Outros": [
                 ("Número Rota", "num_rota"),
-                ("Sapato", "sapato")
-            ],
-            "Contato e Localização": [
+                ("Sapato", "sapato"),
                 ("E-mail", "email"),
                 ("Telefone", "telefone"),
                 ("Telefone Recado", "tel_recado"),
@@ -67,15 +65,15 @@ class App(ctk.CTk):
             ]
         }
         
-        # Frame fixo para as três seções
+        # Frame fixo para as duas seções
         frame_secoes = ctk.CTkFrame(self.frame_form)
         frame_secoes.pack(fill="both", expand=True, padx=10, pady=10)
         
-        # Criar as três seções
+        # Criar as duas seções
         self.entradas = {}
         
         for titulo, campos_secao in campos.items():
-            # Frame para cada seção
+            # Frame para cada seção (ajustado para ocupar metade do espaço)
             frame_secao = ctk.CTkFrame(frame_secoes)
             frame_secao.pack(side="left", fill="both", expand=True, padx=5)
             
@@ -88,7 +86,7 @@ class App(ctk.CTk):
             label_secao.pack(pady=10)
             
             # Campos da seção
-            if titulo == "Dados Funcionais":
+            if titulo == "Dados do Colaborador":
                 # Primeira linha: Matrícula, Data Admissão e Data Nascimento
                 frame_linha1 = ctk.CTkFrame(frame_secao)
                 frame_linha1.pack(fill="x", padx=10, pady=5)
@@ -138,7 +136,7 @@ class App(ctk.CTk):
                 self.entradas['nome'] = ctk.CTkEntry(frame_nome)
                 self.entradas['nome'].pack(fill="x", padx=5, pady=(0,5))
                 
-                # Terceira linha: Setor, Empresa e Área
+                # Terceira linha: Setor, Observação e PCD
                 frame_linha3 = ctk.CTkFrame(frame_secao)
                 frame_linha3.pack(fill="x", padx=10, pady=5)
                 
@@ -151,6 +149,28 @@ class App(ctk.CTk):
                     values=["Recebimento", "Expedição"]
                 )
                 self.entradas['setor'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Observação
+                frame_obs = ctk.CTkFrame(frame_linha3)
+                frame_obs.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_obs, text="Observação").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['observacao'] = ctk.CTkComboBox(
+                    frame_obs,
+                    values=["Afastado", "Ativo"]
+                )
+                self.entradas['observacao'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # PCD
+                frame_pcd = ctk.CTkFrame(frame_linha3)
+                frame_pcd.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_pcd, text="PCD").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['pcd'] = ctk.CTkCheckBox(
+                    frame_pcd,
+                    text="",
+                    onvalue=True,
+                    offvalue=False
+                )
+                self.entradas['pcd'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Quarta linha: CPF, Cargo e Turno
                 frame_linha4 = ctk.CTkFrame(frame_secao)
@@ -210,41 +230,84 @@ class App(ctk.CTk):
                 ctk.CTkLabel(frame_lider, text="Líder").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['lider'] = ctk.CTkEntry(frame_lider)
                 self.entradas['lider'].pack(fill="x", padx=5, pady=(0,5))
-            elif titulo == "Informações Operacionais":
+            elif titulo == "Contatos e Outros":
+                # Primeira linha: Colete, Sapato e Número da Rota
+                frame_linha1 = ctk.CTkFrame(frame_secao)
+                frame_linha1.pack(fill="x", padx=10, pady=5)
+                
                 # Colete
-                frame = ctk.CTkFrame(frame_secao)
-                frame.pack(fill="x", padx=10, pady=5)
-                ctk.CTkLabel(frame, text="Colete").pack(anchor="w", padx=5, pady=(5,0))
+                frame_colete = ctk.CTkFrame(frame_linha1)
+                frame_colete.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_colete, text="Colete").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['colete'] = ctk.CTkComboBox(
-                    frame,
+                    frame_colete,
                     values=["PP", "P", "M", "G", "GG"]
                 )
                 self.entradas['colete'].pack(fill="x", padx=5, pady=(0,5))
-
-                # Continuar com os demais campos da seção
-                for label_text, campo in campos_secao:
-                    frame = ctk.CTkFrame(frame_secao)
-                    frame.pack(fill="x", padx=10, pady=5)
-                    
-                    label = ctk.CTkLabel(frame, text=label_text)
-                    label.pack(anchor="w", padx=5, pady=(5,0))
-                    
-                    entrada = ctk.CTkEntry(frame)
-                    entrada.pack(fill="x", padx=5, pady=(0,5))
-                    
-                    self.entradas[campo] = entrada
-            else:  # Contato e Localização
-                for label_text, campo in campos_secao:
-                    frame = ctk.CTkFrame(frame_secao)
-                    frame.pack(fill="x", padx=10, pady=5)
-                    
-                    label = ctk.CTkLabel(frame, text=label_text)
-                    label.pack(anchor="w", padx=5, pady=(5,0))
-                    
-                    entrada = ctk.CTkEntry(frame)
-                    entrada.pack(fill="x", padx=5, pady=(0,5))
-                    
-                    self.entradas[campo] = entrada
+                
+                # Sapato
+                frame_sapato = ctk.CTkFrame(frame_linha1)
+                frame_sapato.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_sapato, text="Sapato").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['sapato'] = ctk.CTkEntry(frame_sapato)
+                self.entradas['sapato'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Número da Rota
+                frame_rota = ctk.CTkFrame(frame_linha1)
+                frame_rota.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_rota, text="Número Rota").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['num_rota'] = ctk.CTkEntry(frame_rota)
+                self.entradas['num_rota'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Segunda linha: Email
+                frame_linha2 = ctk.CTkFrame(frame_secao)
+                frame_linha2.pack(fill="x", padx=10, pady=5)
+                ctk.CTkLabel(frame_linha2, text="E-mail").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['email'] = ctk.CTkEntry(frame_linha2)
+                self.entradas['email'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Terceira linha: Telefone e Telefone Recado
+                frame_linha3 = ctk.CTkFrame(frame_secao)
+                frame_linha3.pack(fill="x", padx=10, pady=5)
+                
+                # Telefone
+                frame_tel = ctk.CTkFrame(frame_linha3)
+                frame_tel.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_tel, text="Telefone").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['telefone'] = ctk.CTkEntry(frame_tel)
+                self.entradas['telefone'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Telefone Recado
+                frame_tel_rec = ctk.CTkFrame(frame_linha3)
+                frame_tel_rec.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_tel_rec, text="Telefone Recado").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['tel_recado'] = ctk.CTkEntry(frame_tel_rec)
+                self.entradas['tel_recado'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Quarta linha: Endereço e Bairro
+                frame_linha4 = ctk.CTkFrame(frame_secao)
+                frame_linha4.pack(fill="x", padx=10, pady=5)
+                
+                # Endereço
+                frame_end = ctk.CTkFrame(frame_linha4)
+                frame_end.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_end, text="Endereço").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['endereco'] = ctk.CTkEntry(frame_end)
+                self.entradas['endereco'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Bairro
+                frame_bairro = ctk.CTkFrame(frame_linha4)
+                frame_bairro.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_bairro, text="Bairro").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['bairro'] = ctk.CTkEntry(frame_bairro)
+                self.entradas['bairro'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Quinta linha: Referência
+                frame_linha5 = ctk.CTkFrame(frame_secao)
+                frame_linha5.pack(fill="x", padx=10, pady=5)
+                ctk.CTkLabel(frame_linha5, text="Referência").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['referencia'] = ctk.CTkEntry(frame_linha5)
+                self.entradas['referencia'].pack(fill="x", padx=5, pady=(0,5))
 
 if __name__ == "__main__":
     app = App()
