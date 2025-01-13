@@ -52,14 +52,10 @@ class App(ctk.CTk):
                 ("Nome", "nome"),
                 ("CPF", "cpf"),
                 ("Cargo", "cargo")
-                # Setor será ComboBox
             ],
             "Informações Operacionais": [
-                # Turno será ComboBox
-                ("Líder", "lider"),
                 ("Número Rota", "num_rota"),
                 ("Sapato", "sapato")
-                # Empresa, Área e Colete são ComboBox
             ],
             "Contato e Localização": [
                 ("E-mail", "email"),
@@ -93,18 +89,18 @@ class App(ctk.CTk):
             
             # Campos da seção
             if titulo == "Dados Funcionais":
-                # Frame para matrícula e data de admissão
+                # Primeira linha: Matrícula, Data Admissão e Data Nascimento
                 frame_linha1 = ctk.CTkFrame(frame_secao)
                 frame_linha1.pack(fill="x", padx=10, pady=5)
                 
-                # Frame para matrícula
+                # Matrícula
                 frame_mat = ctk.CTkFrame(frame_linha1)
                 frame_mat.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_mat, text="Matrícula").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['mat'] = ctk.CTkEntry(frame_mat)
                 self.entradas['mat'].pack(fill="x", padx=5, pady=(0,5))
                 
-                # Frame para data de admissão
+                # Data Admissão
                 frame_dt_adm = ctk.CTkFrame(frame_linha1)
                 frame_dt_adm.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_dt_adm, text="Data Admissão").pack(anchor="w", padx=5, pady=(5,0))
@@ -118,19 +114,8 @@ class App(ctk.CTk):
                 )
                 self.entradas['dt_admissao'].pack(fill="x", padx=5, pady=(0,5))
                 
-                # Frame para nome e data de nascimento
-                frame_linha2 = ctk.CTkFrame(frame_secao)
-                frame_linha2.pack(fill="x", padx=10, pady=5)
-                
-                # Frame para nome
-                frame_nome = ctk.CTkFrame(frame_linha2)
-                frame_nome.pack(side="left", fill="x", expand=True, padx=5)
-                ctk.CTkLabel(frame_nome, text="Nome").pack(anchor="w", padx=5, pady=(5,0))
-                self.entradas['nome'] = ctk.CTkEntry(frame_nome)
-                self.entradas['nome'].pack(fill="x", padx=5, pady=(0,5))
-                
-                # Frame para data de nascimento
-                frame_dt_nasc = ctk.CTkFrame(frame_linha2)
+                # Data Nascimento
+                frame_dt_nasc = ctk.CTkFrame(frame_linha1)
                 frame_dt_nasc.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_dt_nasc, text="Data Nascimento").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['dt_nascimento'] = DateEntry(
@@ -143,59 +128,89 @@ class App(ctk.CTk):
                 )
                 self.entradas['dt_nascimento'].pack(fill="x", padx=5, pady=(0,5))
                 
-                # Adicionar Setor como ComboBox
-                frame = ctk.CTkFrame(frame_secao)
-                frame.pack(fill="x", padx=10, pady=5)
-                ctk.CTkLabel(frame, text="Setor").pack(anchor="w", padx=5, pady=(5,0))
+                # Segunda linha: Nome
+                frame_linha2 = ctk.CTkFrame(frame_secao)
+                frame_linha2.pack(fill="x", padx=10, pady=5)
+                
+                frame_nome = ctk.CTkFrame(frame_linha2)
+                frame_nome.pack(fill="x", padx=5)
+                ctk.CTkLabel(frame_nome, text="Nome").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['nome'] = ctk.CTkEntry(frame_nome)
+                self.entradas['nome'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Terceira linha: Setor, Empresa e Área
+                frame_linha3 = ctk.CTkFrame(frame_secao)
+                frame_linha3.pack(fill="x", padx=10, pady=5)
+                
+                # Setor
+                frame_setor = ctk.CTkFrame(frame_linha3)
+                frame_setor.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_setor, text="Setor").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['setor'] = ctk.CTkComboBox(
-                    frame,
+                    frame_setor,
                     values=["Recebimento", "Expedição"]
                 )
                 self.entradas['setor'].pack(fill="x", padx=5, pady=(0,5))
                 
-                # Continuar com os demais campos da seção
-                for label_text, campo in campos_secao[2:]:  # Pular os campos já criados
-                    frame = ctk.CTkFrame(frame_secao)
-                    frame.pack(fill="x", padx=10, pady=5)
-                    
-                    label = ctk.CTkLabel(frame, text=label_text)
-                    label.pack(anchor="w", padx=5, pady=(5,0))
-                    
-                    entrada = ctk.CTkEntry(frame)
-                    entrada.pack(fill="x", padx=5, pady=(0,5))
-                    
-                    self.entradas[campo] = entrada
-            elif titulo == "Informações Operacionais":
-                # Empresa
-                frame = ctk.CTkFrame(frame_secao)
-                frame.pack(fill="x", padx=10, pady=5)
-                ctk.CTkLabel(frame, text="Empresa").pack(anchor="w", padx=5, pady=(5,0))
-                self.entradas['empresa'] = ctk.CTkComboBox(
-                    frame,
-                    values=["Philco", "Bric", "Hunt", "Fênix"]
-                )
-                self.entradas['empresa'].pack(fill="x", padx=5, pady=(0,5))
-
-                # Área
-                frame = ctk.CTkFrame(frame_secao)
-                frame.pack(fill="x", padx=10, pady=5)
-                ctk.CTkLabel(frame, text="Área").pack(anchor="w", padx=5, pady=(5,0))
-                self.entradas['area'] = ctk.CTkComboBox(
-                    frame,
-                    values=["A1", "A2", "A3", "B1", "ADM"]
-                )
-                self.entradas['area'].pack(fill="x", padx=5, pady=(0,5))
-
+                # Quarta linha: CPF, Cargo e Turno
+                frame_linha4 = ctk.CTkFrame(frame_secao)
+                frame_linha4.pack(fill="x", padx=10, pady=5)
+                
+                # CPF
+                frame_cpf = ctk.CTkFrame(frame_linha4)
+                frame_cpf.pack(side="left", fill="x", expand=0.45, padx=5)
+                ctk.CTkLabel(frame_cpf, text="CPF").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['cpf'] = ctk.CTkEntry(frame_cpf)
+                self.entradas['cpf'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Cargo
+                frame_cargo = ctk.CTkFrame(frame_linha4)
+                frame_cargo.pack(side="left", fill="x", expand=0.45, padx=5)
+                ctk.CTkLabel(frame_cargo, text="Cargo").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['cargo'] = ctk.CTkEntry(frame_cargo)
+                self.entradas['cargo'].pack(fill="x", padx=5, pady=(0,5))
+                
                 # Turno
-                frame = ctk.CTkFrame(frame_secao)
-                frame.pack(fill="x", padx=10, pady=5)
-                ctk.CTkLabel(frame, text="Turno").pack(anchor="w", padx=5, pady=(5,0))
+                frame_turno = ctk.CTkFrame(frame_linha4)
+                frame_turno.pack(side="left", fill="x", expand=0.1, padx=5)
+                ctk.CTkLabel(frame_turno, text="Turno").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['turno'] = ctk.CTkComboBox(
-                    frame,
+                    frame_turno,
                     values=["A", "B", "C", "ADM1", "ADM2"]
                 )
                 self.entradas['turno'].pack(fill="x", padx=5, pady=(0,5))
-
+                
+                # Quinta linha: Área, Empresa e Líder
+                frame_linha5 = ctk.CTkFrame(frame_secao)
+                frame_linha5.pack(fill="x", padx=10, pady=5)
+                
+                # Área
+                frame_area = ctk.CTkFrame(frame_linha5)
+                frame_area.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_area, text="Área").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['area'] = ctk.CTkComboBox(
+                    frame_area,
+                    values=["A1", "A2", "A3", "B1", "ADM"]
+                )
+                self.entradas['area'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Empresa
+                frame_empresa = ctk.CTkFrame(frame_linha5)
+                frame_empresa.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_empresa, text="Empresa").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['empresa'] = ctk.CTkComboBox(
+                    frame_empresa,
+                    values=["PHILCO", "BRIC", "HUNT", "FENIX"]
+                )
+                self.entradas['empresa'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Líder
+                frame_lider = ctk.CTkFrame(frame_linha5)
+                frame_lider.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_lider, text="Líder").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['lider'] = ctk.CTkEntry(frame_lider)
+                self.entradas['lider'].pack(fill="x", padx=5, pady=(0,5))
+            elif titulo == "Informações Operacionais":
                 # Colete
                 frame = ctk.CTkFrame(frame_secao)
                 frame.pack(fill="x", padx=10, pady=5)
