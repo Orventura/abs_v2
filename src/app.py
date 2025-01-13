@@ -1,5 +1,10 @@
 import customtkinter as ctk
 from database import Database
+from tkcalendar import DateEntry
+import locale
+
+# Configurar locale para português
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 class App(ctk.CTk):
     def __init__(self):
@@ -46,8 +51,6 @@ class App(ctk.CTk):
                 ("Matrícula", "mat"),
                 ("Nome", "nome"),
                 ("CPF", "cpf"),
-                ("Data Nascimento", "dt_nascimento"),
-                ("Data Admissão", "dt_admissao"),
                 ("Cargo", "cargo"),
                 ("Setor", "setor")
             ],
@@ -91,17 +94,81 @@ class App(ctk.CTk):
             label_secao.pack(pady=10)
             
             # Campos da seção
-            for label_text, campo in campos_secao:
-                frame = ctk.CTkFrame(frame_secao)
-                frame.pack(fill="x", padx=10, pady=5)
+            if titulo == "Dados Funcionais":
+                # Frame para matrícula e data de admissão
+                frame_linha1 = ctk.CTkFrame(frame_secao)
+                frame_linha1.pack(fill="x", padx=10, pady=5)
                 
-                label = ctk.CTkLabel(frame, text=label_text)
-                label.pack(anchor="w", padx=5, pady=(5,0))
+                # Frame para matrícula
+                frame_mat = ctk.CTkFrame(frame_linha1)
+                frame_mat.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_mat, text="Matrícula").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['mat'] = ctk.CTkEntry(frame_mat)
+                self.entradas['mat'].pack(fill="x", padx=5, pady=(0,5))
                 
-                entrada = ctk.CTkEntry(frame)
-                entrada.pack(fill="x", padx=5, pady=(0,5))
+                # Frame para data de admissão
+                frame_dt_adm = ctk.CTkFrame(frame_linha1)
+                frame_dt_adm.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_dt_adm, text="Data Admissão").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['dt_admissao'] = DateEntry(
+                    frame_dt_adm,
+                    locale='pt_BR',
+                    date_pattern='dd/mm/yyyy',
+                    background='darkblue',
+                    foreground='white',
+                    borderwidth=2
+                )
+                self.entradas['dt_admissao'].pack(fill="x", padx=5, pady=(0,5))
                 
-                self.entradas[campo] = entrada
+                # Frame para nome e data de nascimento
+                frame_linha2 = ctk.CTkFrame(frame_secao)
+                frame_linha2.pack(fill="x", padx=10, pady=5)
+                
+                # Frame para nome
+                frame_nome = ctk.CTkFrame(frame_linha2)
+                frame_nome.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_nome, text="Nome").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['nome'] = ctk.CTkEntry(frame_nome)
+                self.entradas['nome'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Frame para data de nascimento
+                frame_dt_nasc = ctk.CTkFrame(frame_linha2)
+                frame_dt_nasc.pack(side="left", fill="x", expand=True, padx=5)
+                ctk.CTkLabel(frame_dt_nasc, text="Data Nascimento").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['dt_nascimento'] = DateEntry(
+                    frame_dt_nasc,
+                    locale='pt_BR',
+                    date_pattern='dd/mm/yyyy',
+                    background='darkblue',
+                    foreground='white',
+                    borderwidth=2
+                )
+                self.entradas['dt_nascimento'].pack(fill="x", padx=5, pady=(0,5))
+                
+                # Continuar com os demais campos da seção
+                for label_text, campo in campos_secao[2:]:  # Pular os campos já criados
+                    frame = ctk.CTkFrame(frame_secao)
+                    frame.pack(fill="x", padx=10, pady=5)
+                    
+                    label = ctk.CTkLabel(frame, text=label_text)
+                    label.pack(anchor="w", padx=5, pady=(5,0))
+                    
+                    entrada = ctk.CTkEntry(frame)
+                    entrada.pack(fill="x", padx=5, pady=(0,5))
+                    
+                    self.entradas[campo] = entrada
+            else:
+                for label_text, campo in campos_secao:
+                    frame = ctk.CTkFrame(frame_secao)
+                    frame.pack(fill="x", padx=10, pady=5)
+                    
+                    label = ctk.CTkLabel(frame, text=label_text)
+                    label.pack(anchor="w", padx=5, pady=(5,0))
+                    
+                    entrada = ctk.CTkEntry(frame)
+                    entrada.pack(fill="x", padx=5, pady=(0,5))
+                    
+                    self.entradas[campo] = entrada
 
 if __name__ == "__main__":
     app = App()
