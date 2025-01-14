@@ -147,9 +147,9 @@ class App(ctk.CTk):
                 frame_setor = ctk.CTkFrame(frame_linha3, fg_color='Black')
                 frame_setor.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_setor, text="Setor").pack(anchor="w", padx=5, pady=(5,0))
-                self.entradas['setor'] = ctk.CTkComboBox(
-                    frame_setor,
-                    values=["Recebimento", "Expedição"]
+                self.entradas['setor'] = ctk.CTkComboBox(frame_setor,
+                    values=["Recebimento", "Expedição"],
+
                 )
                 self.entradas['setor'].pack(fill="x", padx=5, pady=(0,5))
                 

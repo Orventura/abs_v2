@@ -3,7 +3,7 @@ from tkcalendar import DateEntry
 from datetime import datetime
 import locale
 from tkinter import messagebox
-
+from database import Database
 class JanelaOcorrencias(ctk.CTkToplevel):
     def __init__(self, parent, database):
         super().__init__(parent)
@@ -176,3 +176,8 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         self.observacao.delete("1.0", "end")
         self.justificado.deselect()
         self.data_entry.set_date(datetime.now()) 
+
+if __name__ == "__main__":
+    db = Database()
+    app = JanelaOcorrencias(None, database=db)
+    app.mainloop()
