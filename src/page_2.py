@@ -1,9 +1,14 @@
 import customtkinter as ctk
 from tkcalendar import DateEntry
 from datetime import datetime
+from tkinter import messagebox
+from database import Database
 
 class RegistroOcorrencias:
     def __init__(self):
+        # Inicializa o banco de dados
+        self.db = Database()
+        
         # Configurações gerais do CustomTkinter
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
@@ -107,6 +112,69 @@ class RegistroOcorrencias:
         self.limpar_btn = ctk.CTkButton(self.btn_frame, text="Limpar", width=120,
                                        fg_color="#1f538d", hover_color="#1a4572")
         self.limpar_btn.pack(side="left", padx=5)
+
+        # Atualizar os botões com os comandos
+        self.buscar_btn.configure(command=self.buscar_funcionario)
+        self.salvar_btn.configure(command=self.salvar_ocorrencia)
+        self.limpar_btn.configure(command=self.limpar_campos)
+
+    def buscar_funcionario(self):
+        matricula = self.matricula_entry.get()
+        if not matricula:
+            messagebox.showerror("Erro", "Por favor, insira uma matrícula")
+            return
+            
+        funcionario = self.db.buscar_dados_funcionario_para_ocorrencia(matricula)
+        if funcionario:
+            self.colab_entry.delete(0, 'end')
+            self.colab_entry.insert(0, funcionario[1])  # nome
+            self.area_entry.delete(0, 'end')
+            self.area_entry.insert(0, funcionario[2])   # area
+            self.turno_entry.delete(0, 'end')
+            self.turno_entry.insert(0, funcionario[3])  # turno
+        else:
+            messagebox.showerror("Erro", "Funcionário não encontrado")
+            self.limpar_campos()
+
+    def salvar_ocorrencia(self):
+        # Validar campos obrigatórios
+        if not all([
+            self.matricula_entry.get(),
+            self.colab_entry.get(),
+            self.area_entry.get(),
+            self.turno_entry.get()
+        ]):
+            messagebox.showerror("Erro", "Todos os campos são obrigatórios")
+            return
+
+        # Coletar dados
+        dados = (
+            self.data_entry.get_date().strftime('%Y-%m-%d'),
+            self.area_entry.get(),
+            self.turno_entry.get(),
+            self.matricula_entry.get(),
+            self.colab_entry.get(),
+            self.ausencia_combo.get(),
+            self.obs_text.get("1.0", "end-1c"),
+            "Sim" if self.justificado_var.get() else "Não"
+        )
+        
+        try:
+            self.db.inserir_ocorrencia(dados)
+            messagebox.showinfo("Sucesso", "Ocorrência registrada com sucesso!")
+            self.limpar_campos()
+        except Exception as e:
+            messagebox.showerror("Erro", f"Erro ao salvar ocorrência: {str(e)}")
+
+    def limpar_campos(self):
+        self.matricula_entry.delete(0, 'end')
+        self.colab_entry.delete(0, 'end')
+        self.area_entry.delete(0, 'end')
+        self.turno_entry.delete(0, 'end')
+        self.ausencia_combo.set("Falta")
+        self.obs_text.delete("1.0", "end")
+        self.justificado_var.set(False)
+        self.data_entry.set_date(datetime.now())
 
     def run(self):
         self.root.mainloop()
