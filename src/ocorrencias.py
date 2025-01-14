@@ -23,12 +23,12 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         
     def criar_interface(self):
         # Frame principal
-        self.frame_principal = ctk.CTkFrame(self)
+        self.frame_principal = ctk.CTkFrame(self, fg_color="black")
         self.frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
         
         # Campos do formulário
         # Data
-        frame_data = ctk.CTkFrame(self.frame_principal)
+        frame_data = ctk.CTkFrame(self.frame_principal, fg_color="black")
         frame_data.pack(fill="x", padx=5, pady=5)
         ctk.CTkLabel(frame_data, text="Data:").pack(side="left", padx=5)
         self.data_entry = DateEntry(
@@ -39,7 +39,7 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         self.data_entry.pack(side="left", padx=5)
         
         # Matrícula e busca
-        frame_matricula = ctk.CTkFrame(self.frame_principal)
+        frame_matricula = ctk.CTkFrame(self.frame_principal, fg_color="black")
         frame_matricula.pack(fill="x", padx=5, pady=5)
         ctk.CTkLabel(frame_matricula, text="Matrícula:").pack(side="left", padx=5)
         self.matricula_entry = ctk.CTkEntry(frame_matricula)
@@ -56,7 +56,7 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         self.turno_var = ctk.StringVar()
         
         # Colaborador
-        frame_colab = ctk.CTkFrame(self.frame_principal)
+        frame_colab = ctk.CTkFrame(self.frame_principal, fg_color="black")
         frame_colab.pack(fill="x", padx=5, pady=5)
         ctk.CTkLabel(frame_colab, text="Colaborador:").pack(side="left", padx=5)
         ctk.CTkEntry(
@@ -66,11 +66,11 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         ).pack(side="left", padx=5, fill="x", expand=True)
         
         # Área e Turno
-        frame_area_turno = ctk.CTkFrame(self.frame_principal)
+        frame_area_turno = ctk.CTkFrame(self.frame_principal, fg_color="black")
         frame_area_turno.pack(fill="x", padx=5, pady=5)
         
         # Área
-        frame_area = ctk.CTkFrame(frame_area_turno)
+        frame_area = ctk.CTkFrame(frame_area_turno, fg_color="black")
         frame_area.pack(side="left", fill="x", expand=True, padx=5)
         ctk.CTkLabel(frame_area, text="Área:").pack(side="left", padx=5)
         ctk.CTkEntry(
@@ -80,7 +80,7 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         ).pack(side="left", padx=5, fill="x", expand=True)
         
         # Turno
-        frame_turno = ctk.CTkFrame(frame_area_turno)
+        frame_turno = ctk.CTkFrame(frame_area_turno, fg_color="black")
         frame_turno.pack(side="left", fill="x", expand=True, padx=5)
         ctk.CTkLabel(frame_turno, text="Turno:").pack(side="left", padx=5)
         ctk.CTkEntry(
@@ -90,7 +90,7 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         ).pack(side="left", padx=5, fill="x", expand=True)
         
         # Tipo de Ausência
-        frame_tipo_ausencia = ctk.CTkFrame(self.frame_principal)
+        frame_tipo_ausencia = ctk.CTkFrame(self.frame_principal, fg_color="black")
         frame_tipo_ausencia.pack(fill="x", padx=5, pady=5)
         ctk.CTkLabel(frame_tipo_ausencia, text="Tipo de Ausência:").pack(side="left", padx=5)
         self.tipo_ausencia = ctk.CTkComboBox(
@@ -100,14 +100,14 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         self.tipo_ausencia.pack(side="left", padx=5)
         
         # Observação
-        frame_obs = ctk.CTkFrame(self.frame_principal)
+        frame_obs = ctk.CTkFrame(self.frame_principal, fg_color="black")
         frame_obs.pack(fill="x", padx=5, pady=5)
         ctk.CTkLabel(frame_obs, text="Observação:").pack(anchor="w", padx=5)
         self.observacao = ctk.CTkTextbox(frame_obs, height=100)
         self.observacao.pack(fill="x", padx=5, pady=5)
         
         # Justificado
-        frame_justificado = ctk.CTkFrame(self.frame_principal)
+        frame_justificado = ctk.CTkFrame(self.frame_principal, fg_color="black")
         frame_justificado.pack(fill="x", padx=5, pady=5)
         self.justificado = ctk.CTkCheckBox(
             frame_justificado,
@@ -115,25 +115,9 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         )
         self.justificado.pack(side="left", padx=5)
         
-        # Observação 2
-        frame_obs2 = ctk.CTkFrame(self.frame_principal)
-        frame_obs2.pack(fill="x", padx=5, pady=5)
-        ctk.CTkLabel(frame_obs2, text="Observação 2:").pack(anchor="w", padx=5)
-        self.observacao2 = ctk.CTkTextbox(frame_obs2, height=100)
-        self.observacao2.pack(fill="x", padx=5, pady=5)
-        
-        # Tipo
-        frame_tipo = ctk.CTkFrame(self.frame_principal)
-        frame_tipo.pack(fill="x", padx=5, pady=5)
-        ctk.CTkLabel(frame_tipo, text="Tipo:").pack(side="left", padx=5)
-        self.tipo = ctk.CTkComboBox(
-            frame_tipo,
-            values=["Advertência", "Suspensão", "Orientação"]
-        )
-        self.tipo.pack(side="left", padx=5)
-        
+       
         # Botões
-        frame_botoes = ctk.CTkFrame(self.frame_principal)
+        frame_botoes = ctk.CTkFrame(self.frame_principal, fg_color="black")
         frame_botoes.pack(fill="x", padx=5, pady=10)
         
         ctk.CTkButton(
@@ -174,8 +158,6 @@ class JanelaOcorrencias(ctk.CTkToplevel):
             self.tipo_ausencia.get(),
             self.observacao.get("1.0", "end-1c"),
             "Sim" if self.justificado.get() else "Não",
-            self.observacao2.get("1.0", "end-1c"),
-            self.tipo.get()
         )
         
         try:
@@ -193,6 +175,4 @@ class JanelaOcorrencias(ctk.CTkToplevel):
         self.tipo_ausencia.set("")
         self.observacao.delete("1.0", "end")
         self.justificado.deselect()
-        self.observacao2.delete("1.0", "end")
-        self.tipo.set("")
         self.data_entry.set_date(datetime.now()) 

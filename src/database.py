@@ -62,8 +62,6 @@ class Database:
             tipo_ausencia TEXT NOT NULL,
             observacao TEXT,
             justificado TEXT NOT NULL,
-            observacao2 TEXT,
-            tipo TEXT NOT NULL,
             FOREIGN KEY (matricula) REFERENCES funcionarios(mat)
         )
         """)
@@ -118,9 +116,8 @@ class Database:
         self.cursor.execute("""
         INSERT INTO ocorrencias (
             data, area, turno, matricula, colaborador,
-            tipo_ausencia, observacao, justificado,
-            observacao2, tipo
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            tipo_ausencia, observacao, justificado
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, dados)
         self.conn.commit()
 
@@ -220,4 +217,6 @@ def teste_banco():
         print(f"❌ Erro na exclusão: {e}")
 
 if __name__ == "__main__":
+    db = Database()
     teste_banco()
+    
