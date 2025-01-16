@@ -49,5 +49,3 @@ Thumbs.db
 .env.local
 .env.*.local
 
-# Poetry
-poetry.lock

@@ -32,11 +32,11 @@ class App(ctk.CTk):
         
     def criar_frames(self):
         # Frame principal (agora fixo, não scrollable)
-        self.frame_principal = ctk.CTkFrame(self, fg_color='Black')
+        self.frame_principal = ctk.CTkFrame(self, fg_color='black')
         self.frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
         
         # Frame do formulário
-        self.frame_form = ctk.CTkFrame(self.frame_principal, fg_color='Black')
+        self.frame_form = ctk.CTkFrame(self.frame_principal, fg_color='black')
         self.frame_form.pack(fill="both", expand=True, padx=10, pady=10)
         
     def criar_formulario(self):
@@ -69,7 +69,7 @@ class App(ctk.CTk):
         }
         
         # Frame fixo para as duas seções
-        frame_secoes = ctk.CTkFrame(self.frame_form, fg_color='Black')
+        frame_secoes = ctk.CTkFrame(self.frame_form, fg_color='black')
         frame_secoes.pack(fill="both", expand=True, padx=10, pady=10)
         
         # Criar as duas seções
@@ -77,7 +77,7 @@ class App(ctk.CTk):
         
         for titulo, campos_secao in campos.items():
             # Frame para cada seção (ajustado para ocupar metade do espaço)
-            frame_secao = ctk.CTkFrame(frame_secoes, fg_color='Black', border_width=1, border_color='darkgray')
+            frame_secao = ctk.CTkFrame(frame_secoes, fg_color='black', border_width=1, border_color='darkgray')
             frame_secao.pack(side="left", fill="both", expand=True, padx=5)
             
             # Título da seção
@@ -91,18 +91,18 @@ class App(ctk.CTk):
             # Campos da seção
             if titulo == "Dados do Colaborador":
                 # Primeira linha: Matrícula, Data Admissão e Data Nascimento
-                frame_linha1 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha1 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha1.pack(fill="x", padx=10, pady=5)
                 
                 # Matrícula
-                frame_mat = ctk.CTkFrame(frame_linha1, fg_color='Black')
+                frame_mat = ctk.CTkFrame(frame_linha1, fg_color='black')
                 frame_mat.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_mat, text="Matrícula").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['mat'] = ctk.CTkEntry(frame_mat)
                 self.entradas['mat'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Data Admissão
-                frame_dt_adm = ctk.CTkFrame(frame_linha1, fg_color='Black')
+                frame_dt_adm = ctk.CTkFrame(frame_linha1, fg_color='black')
                 frame_dt_adm.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_dt_adm, text="Data Admissão").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['dt_admissao'] = DateEntry(
@@ -116,7 +116,7 @@ class App(ctk.CTk):
                 self.entradas['dt_admissao'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Data Nascimento
-                frame_dt_nasc = ctk.CTkFrame(frame_linha1, fg_color='Black')
+                frame_dt_nasc = ctk.CTkFrame(frame_linha1, fg_color='black')
                 frame_dt_nasc.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_dt_nasc, text="Data Nascimento").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['dt_nascimento'] = DateEntry(
@@ -130,21 +130,21 @@ class App(ctk.CTk):
                 self.entradas['dt_nascimento'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Segunda linha: Nome
-                frame_linha2 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha2 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha2.pack(fill="x", padx=10, pady=5)
                 
-                frame_nome = ctk.CTkFrame(frame_linha2, fg_color='Black')
+                frame_nome = ctk.CTkFrame(frame_linha2, fg_color='black')
                 frame_nome.pack(fill="x", padx=5)
                 ctk.CTkLabel(frame_nome, text="Nome").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['nome'] = ctk.CTkEntry(frame_nome)
                 self.entradas['nome'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Terceira linha: Setor, Observação e PCD
-                frame_linha3 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha3 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha3.pack(fill="x", padx=10, pady=5)
                 
                 # Setor
-                frame_setor = ctk.CTkFrame(frame_linha3, fg_color='Black')
+                frame_setor = ctk.CTkFrame(frame_linha3, fg_color='black')
                 frame_setor.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_setor, text="Setor").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['setor'] = ctk.CTkComboBox(frame_setor,
@@ -154,7 +154,7 @@ class App(ctk.CTk):
                 self.entradas['setor'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Observação
-                frame_obs = ctk.CTkFrame(frame_linha3, fg_color='Black')
+                frame_obs = ctk.CTkFrame(frame_linha3, fg_color='black')
                 frame_obs.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_obs, text="Observação").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['observacao'] = ctk.CTkComboBox(
@@ -164,7 +164,7 @@ class App(ctk.CTk):
                 self.entradas['observacao'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # PCD
-                frame_pcd = ctk.CTkFrame(frame_linha3, fg_color='Black')
+                frame_pcd = ctk.CTkFrame(frame_linha3, fg_color='black')
                 frame_pcd.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_pcd, text="PCD").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['pcd'] = ctk.CTkCheckBox(
@@ -176,25 +176,25 @@ class App(ctk.CTk):
                 self.entradas['pcd'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Quarta linha: CPF, Cargo e Turno
-                frame_linha4 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha4 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha4.pack(fill="x", padx=10, pady=5)
                 
                 # CPF
-                frame_cpf = ctk.CTkFrame(frame_linha4, fg_color='Black')
+                frame_cpf = ctk.CTkFrame(frame_linha4, fg_color='black')
                 frame_cpf.pack(side="left", fill="x", expand=0.45, padx=5)
                 ctk.CTkLabel(frame_cpf, text="CPF").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['cpf'] = ctk.CTkEntry(frame_cpf)
                 self.entradas['cpf'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Cargo
-                frame_cargo = ctk.CTkFrame(frame_linha4, fg_color='Black')
+                frame_cargo = ctk.CTkFrame(frame_linha4, fg_color='black')
                 frame_cargo.pack(side="left", fill="x", expand=0.45, padx=5)
                 ctk.CTkLabel(frame_cargo, text="Cargo").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['cargo'] = ctk.CTkEntry(frame_cargo)
                 self.entradas['cargo'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Turno
-                frame_turno = ctk.CTkFrame(frame_linha4, fg_color='Black')
+                frame_turno = ctk.CTkFrame(frame_linha4, fg_color='black')
                 frame_turno.pack(side="left", fill="x", expand=0.1, padx=5)
                 ctk.CTkLabel(frame_turno, text="Turno").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['turno'] = ctk.CTkComboBox(
@@ -204,11 +204,11 @@ class App(ctk.CTk):
                 self.entradas['turno'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Quinta linha: Área, Empresa e Líder
-                frame_linha5 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha5 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha5.pack(fill="x", padx=10, pady=5)
                 
                 # Área
-                frame_area = ctk.CTkFrame(frame_linha5, fg_color='Black')
+                frame_area = ctk.CTkFrame(frame_linha5, fg_color='black')
                 frame_area.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_area, text="Área").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['area'] = ctk.CTkComboBox(
@@ -218,7 +218,7 @@ class App(ctk.CTk):
                 self.entradas['area'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Empresa
-                frame_empresa = ctk.CTkFrame(frame_linha5, fg_color='Black')
+                frame_empresa = ctk.CTkFrame(frame_linha5, fg_color='black')
                 frame_empresa.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_empresa, text="Empresa").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['empresa'] = ctk.CTkComboBox(
@@ -228,7 +228,7 @@ class App(ctk.CTk):
                 self.entradas['empresa'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Líder
-                frame_lider = ctk.CTkFrame(frame_linha5, fg_color='Black')
+                frame_lider = ctk.CTkFrame(frame_linha5, fg_color='black')
                 frame_lider.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_lider, text="Líder").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['lider'] = ctk.CTkEntry(frame_lider)
@@ -236,11 +236,11 @@ class App(ctk.CTk):
                 
             elif titulo == "Contatos e Outros":
                 # Primeira linha: Colete, Sapato e Número da Rota
-                frame_linha1 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha1 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha1.pack(fill="x", padx=10, pady=5)
                 
                 # Colete
-                frame_colete = ctk.CTkFrame(frame_linha1, fg_color='Black')
+                frame_colete = ctk.CTkFrame(frame_linha1, fg_color='black')
                 frame_colete.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_colete, text="Colete").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['colete'] = ctk.CTkComboBox(
@@ -250,71 +250,71 @@ class App(ctk.CTk):
                 self.entradas['colete'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Sapato
-                frame_sapato = ctk.CTkFrame(frame_linha1, fg_color='Black')
+                frame_sapato = ctk.CTkFrame(frame_linha1, fg_color='black')
                 frame_sapato.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_sapato, text="Sapato").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['sapato'] = ctk.CTkEntry(frame_sapato)
                 self.entradas['sapato'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Número da Rota
-                frame_rota = ctk.CTkFrame(frame_linha1, fg_color='Black')
+                frame_rota = ctk.CTkFrame(frame_linha1, fg_color='black')
                 frame_rota.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_rota, text="Número Rota").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['num_rota'] = ctk.CTkEntry(frame_rota)
                 self.entradas['num_rota'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Segunda linha: Email
-                frame_linha2 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha2 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha2.pack(fill="x", padx=10, pady=5)
                 ctk.CTkLabel(frame_linha2, text="E-mail").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['email'] = ctk.CTkEntry(frame_linha2)
                 self.entradas['email'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Terceira linha: Telefone e Telefone Recado
-                frame_linha3 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha3 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha3.pack(fill="x", padx=10, pady=5)
                 
                 # Telefone
-                frame_tel = ctk.CTkFrame(frame_linha3, fg_color='Black')
+                frame_tel = ctk.CTkFrame(frame_linha3, fg_color='black')
                 frame_tel.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_tel, text="Telefone").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['telefone'] = ctk.CTkEntry(frame_tel)
                 self.entradas['telefone'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Telefone Recado
-                frame_tel_rec = ctk.CTkFrame(frame_linha3, fg_color='Black')
+                frame_tel_rec = ctk.CTkFrame(frame_linha3, fg_color='black')
                 frame_tel_rec.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_tel_rec, text="Telefone Recado").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['tel_recado'] = ctk.CTkEntry(frame_tel_rec)
                 self.entradas['tel_recado'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Quarta linha: Endereço e Bairro
-                frame_linha4 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha4 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha4.pack(fill="x", padx=10, pady=5)
                 
                 # Endereço
-                frame_end = ctk.CTkFrame(frame_linha4, fg_color='Black')
+                frame_end = ctk.CTkFrame(frame_linha4, fg_color='black')
                 frame_end.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_end, text="Endereço").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['endereco'] = ctk.CTkEntry(frame_end)
                 self.entradas['endereco'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Bairro
-                frame_bairro = ctk.CTkFrame(frame_linha4, fg_color='Black')
+                frame_bairro = ctk.CTkFrame(frame_linha4, fg_color='black')
                 frame_bairro.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_bairro, text="Bairro").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['bairro'] = ctk.CTkEntry(frame_bairro)
                 self.entradas['bairro'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Quinta linha: Referência
-                frame_linha5 = ctk.CTkFrame(frame_secao, fg_color='Black')
+                frame_linha5 = ctk.CTkFrame(frame_secao, fg_color='black')
                 frame_linha5.pack(fill="x", padx=10, pady=5)
                 ctk.CTkLabel(frame_linha5, text="Referência").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['referencia'] = ctk.CTkEntry(frame_linha5)
                 self.entradas['referencia'].pack(fill="x", padx=5, pady=(0,5))
 
         # Frame para botões (após os frames de dados)
-        self.frame_botoes = ctk.CTkFrame(self.frame_form, fg_color='Black')
+        self.frame_botoes = ctk.CTkFrame(self.frame_form, fg_color='black')
         self.frame_botoes.pack(fill="x", padx=10, pady=10)
         
         # Botão Salvar
@@ -334,15 +334,6 @@ class App(ctk.CTk):
             width=120
         )
         self.btn_editar.pack(side="left", padx=5)
-        
-        # Botão Ocorrências
-        self.btn_ocorrencias = ctk.CTkButton(
-            self.frame_botoes,
-            text="Ocorrências",
-            command=self.abrir_ocorrencias,
-            width=120
-        )
-        self.btn_ocorrencias.pack(side="left", padx=5)
 
     def salvar_funcionario(self):
         # Cria um dicionário com os dados das entradas
@@ -525,11 +516,6 @@ class App(ctk.CTk):
             
         except Exception as e:
             self.mostrar_mensagem("Erro", f"Erro ao carregar dados do funcionário: {str(e)}")
-
-    def abrir_ocorrencias(self):
-        from ocorrencias import JanelaOcorrencias
-        janela_ocorrencias = JanelaOcorrencias(self, self.db)
-        janela_ocorrencias.grab_set()  # Torna a janela modal
 
 if __name__ == "__main__":
     app = App()
