@@ -1,6 +1,7 @@
 import sqlite3
 from pathlib import Path
 import os
+from datetime import datetime
 
 class Database:
     def __init__(self):
@@ -216,7 +217,63 @@ def teste_banco():
     except Exception as e:
         print(f"❌ Erro na exclusão: {e}")
 
+def teste_aniversariantes():
+    db = Database()
+    
+    # Limpa a tabela de funcionários antes do teste
+    db.cursor.execute("DELETE FROM funcionarios")
+    db.conn.commit()
+
+    # Dados de exemplo para teste
+    funcionarios_teste = [
+        ("12345", "João Silva", "Operador", "Produção", "Empresa A", "1º Turno", "Área 1", "Maria Souza", "2025-01-16", "2025-01-16", "123.456.789-00", "joao@email.com", "Rua A, 123", "Centro", "Próximo ao mercado", "(11)99999-9999", "(11)88888-8888", "Rota 1", "M", "42", "Não", "Ativo"),
+        ("12346", "Maria Oliveira", "Analista", "Financeiro", "Empresa B", "2º Turno", "Área 2", "Carlos Santos", "2024-01-15", "1995-01-13", "987.654.321-00", "maria@email.com", "Rua B, 456", "Centro", "Próximo ao shopping", "(11)99999-8888", "(11)88888-7777", "Rota 2", "G", "40", "Não", "Ativo"),
+        ("12347", "Pedro Almeida", "Gerente", "Vendas", "Empresa C", "3º Turno", "Área 3", "Ana Lima", "2024-01-15", "1988-02-25", "456.789.123-00", "pedro@email.com", "Rua C, 789", "Centro", "Próximo ao parque", "(11)99999-7777", "(11)88888-6666", "Rota 3", "P", "44", "Não", "Ativo"),
+    ]
+
+    # Inserindo os dados de teste
+    for funcionario in funcionarios_teste:
+        try:
+            db.inserir(funcionario)
+            print(f"✅ Inserção de {funcionario[1]} realizada com sucesso!")
+        except Exception as e:
+            print(f"❌ Erro na inserção de {funcionario[1]}: {e}")
+
+    # Verifica se os dados foram inseridos corretamente
+    funcionarios = db.buscar_todos()
+    print(f"Total de funcionários no banco de dados após inserção: {len(funcionarios)}")
+
+    # Testando a busca de aniversariantes
+    print("\n=== Testando Aniversariantes ===")
+    hoje = datetime.now()
+    mes_atual = hoje.month
+    dia_atual = hoje.day
+
+    # Filtra os aniversariantes do mês
+    aniversariantes = []
+    for funcionario in funcionarios:
+        nome = funcionario[1]
+        data_nascimento = funcionario[9]  # Assume que a data de nascimento está na posição 10
+        print(f"Verificando {nome} com data de nascimento {data_nascimento}")  # Debug print
+        if data_nascimento:
+            try:
+                ano_nascimento, mes_nascimento, dia_nascimento = map(int, data_nascimento.split('-'))
+                if mes_nascimento == mes_atual:
+                    aniversariantes.append((nome, data_nascimento, dia_nascimento == dia_atual))
+            except ValueError:
+                print(f"Data de nascimento inválida para {nome}: {data_nascimento}")
+
+    # Exibe os aniversariantes encontrados
+    if aniversariantes:
+        print("Aniversariantes do Mês:")
+        for nome, data, is_today in aniversariantes:
+            emoji = " 🎉🎂" if is_today else ""
+            print(f"{nome} - {data}{emoji}")
+    else:
+        print("Nenhum aniversariante encontrado para este mês.")
+
 if __name__ == "__main__":
     db = Database()
     teste_banco()
+    teste_aniversariantes()
     

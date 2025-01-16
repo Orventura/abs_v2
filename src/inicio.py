@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from datetime import datetime
+from database import Database  # Importa a classe Database
 
 class JanelaPrincipal:
     def __init__(self):
@@ -31,6 +32,9 @@ class JanelaPrincipal:
         self.frame_aniversariantes = ctk.CTkFrame(self.root, fg_color='black', border_color='darkgrey', border_width=1)
         self.frame_aniversariantes.pack(side="right", fill="both", expand=True, padx=20, pady=10)
 
+        # Inicializa o banco de dados
+        self.db = Database()  # Cria uma instância da classe Database
+        
         # Adicionando a lista de aniversariantes
         self.criar_lista_aniversariantes()
 
@@ -61,18 +65,34 @@ class JanelaPrincipal:
         # Título da lista
         ctk.CTkLabel(self.frame_aniversariantes, text="Aniversariantes do Mês", font=("Roboto", 16, "bold")).pack(pady=10)
 
-        # Lista de aniversariantes (exemplo)
-        aniversariantes = [
-            ("João Silva", "01/01"),
-            ("Maria Oliveira", "15/01"),
-            ("Carlos Pereira", "20/01"),
-            ("Ana Souza", "25/01"),
-            ("Pedro Santos", "30/01"),
-        ]
+        # Obtém a data atual
+        hoje = datetime.now()
+        dia_atual = hoje.day
+        mes_atual = hoje.month
 
-        # Criar uma lista para exibir os aniversariantes
-        for nome, data in aniversariantes:
-            ctk.CTkLabel(self.frame_aniversariantes, text=f"{nome} - {data}", fg_color="transparent").pack(anchor="w", padx=10)
+        # Busca todos os funcionários
+        funcionarios = self.db.buscar_todos()
+        #print(f"Funcionários------------------------------------: {funcionarios}")
+        
+        # Filtra os aniversariantes do mês
+        for funcionario in funcionarios:
+            nome = funcionario[1]
+            data_nascimento = funcionario[9]  # Verifique se esta é a posição correta para a data de nascimento
+            
+            # Verifica se a data de nascimento não está vazia
+            if data_nascimento:
+                try:
+                    # Converte a data de nascimento para o formato correto
+                    ano_nascimento, mes_nascimento, dia_nascimento = map(int, data_nascimento.split('-'))
+                    
+                    # Verifica se o mês é igual e se o dia é igual
+                    if mes_nascimento == mes_atual:
+                        # Formata a data de aniversário para DD/MM
+                        data_formatada = f"{dia_nascimento:02}/{mes_nascimento:02}"
+                        emoji = "  🎉 🎂  Parabéns!!!" if dia_nascimento == dia_atual else ""
+                        ctk.CTkLabel(self.frame_aniversariantes, text=f"{nome}  _  {data_formatada}  _ {emoji}", fg_color="transparent").pack(anchor="w", padx=10)
+                except ValueError:
+                    print(f"Data de nascimento inválida para {nome}: {data_nascimento}")
 
 if __name__ == "__main__":
     JanelaPrincipal()
