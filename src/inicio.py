@@ -89,8 +89,8 @@ class JanelaPrincipal:
                     if mes_nascimento == mes_atual:
                         # Formata a data de aniversário para DD/MM
                         data_formatada = f"{dia_nascimento:02}/{mes_nascimento:02}"
-                        emoji = "  🎉 🎂  Parabéns!!!" if dia_nascimento == dia_atual else ""
-                        ctk.CTkLabel(self.frame_aniversariantes, text=f"{nome}  _  {data_formatada}  _ {emoji}", fg_color="transparent").pack(anchor="w", padx=10)
+                        emoji = "_  🎉 🎂  Parabéns!!!" if dia_nascimento == dia_atual else ""
+                        ctk.CTkLabel(self.frame_aniversariantes, text=f"{nome}  _  {data_formatada}   {emoji}", fg_color="transparent").pack(anchor="w", padx=10)
                 except ValueError:
                     print(f"Data de nascimento inválida para {nome}: {data_nascimento}")
 

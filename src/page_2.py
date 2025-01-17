@@ -17,9 +17,10 @@ class RegistroOcorrencias:
         self.root = ctk.CTk()
         self.root.title("Registro de Ocorrências")
         self.root.geometry("450x520")  # Tamanho mais compacto
+        self.root.configure(bg='black')
         
         # Frame principal com cor de fundo preta
-        self.main_frame = ctk.CTkFrame(self.root, fg_color="#000000")
+        self.main_frame = ctk.CTkFrame(self.root, fg_color="#000000", border_width=1, border_color="white")
         self.main_frame.pack(expand=True, fill="both")
 
         # Data

@@ -9,17 +9,19 @@ from components import Validacoes
 # Configurar locale para português
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
-class App(ctk.CTk):
+class App:
     def __init__(self):
-        super().__init__()
-        
-        # Configurações da janela principal
-        self.title("Sistema de Controe de Funcionários")
-        self.geometry("1300x600")
-        
-        # Configuração do tema
+
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
+        
+        # Configurações da janela principal
+        self.root = ctk.CTk()
+        self.root.title("Sistema de Controle de Funcionários")
+        self.root.geometry("1300x600")
+        self.root.configure(bg='black')
+        # Configuração do tema
+
         
         # Inicializa a conexão com o banco
         self.db = Database()
@@ -32,7 +34,7 @@ class App(ctk.CTk):
         
     def criar_frames(self):
         # Frame principal (agora fixo, não scrollable)
-        self.frame_principal = ctk.CTkFrame(self, fg_color='black')
+        self.frame_principal = ctk.CTkFrame(self.root, fg_color='black')
         self.frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
         
         # Frame do formulário
@@ -519,4 +521,4 @@ class App(ctk.CTk):
 
 if __name__ == "__main__":
     app = App()
-    app.mainloop()
+    app.root.mainloop()
