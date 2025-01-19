@@ -5,9 +5,14 @@ import locale
 from datetime import datetime
 from tkinter import messagebox
 from components import Validacoes
+import os
+import platform
 
 # Configurar locale para português
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+if platform.system() == "Windows":
+    locale.setlocale(locale.LC_ALL, 'portuguese')  # Ajuste para Windows
+else:
+    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Linux
 
 class App:
     def __init__(self):

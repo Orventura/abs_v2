@@ -1,7 +1,9 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from datetime import datetime
-from database import Database  # Importa a classe Database
+from database import Database  # Certifique-se de que esta classe está corretamente implementada
+from app import App  # Certifique-se de que esta classe está corretamente implementada
+from page_2 import RegistroOcorrencias  # Certifique-se de que esta classe está corretamente implementada
 
 class JanelaPrincipal:
     def __init__(self):
@@ -12,8 +14,8 @@ class JanelaPrincipal:
         # Configuração da janela principal
         self.root = ctk.CTk()
         self.root.title("Sistema de Controle de Funcionários")
-        self.root.geometry("800x600")  # Tamanho da janela
-        self.root.configure(fg_color='black')  # Cor de fundo da janela
+        self.root.geometry("800x600")
+        self.root.configure(fg_color='black')
 
         # Título
         ctk.CTkLabel(self.root, text="Bem Vindo", font=("Roboto", 24, "bold"), fg_color="transparent").pack(pady=(10, 0))
@@ -33,8 +35,8 @@ class JanelaPrincipal:
         self.frame_aniversariantes.pack(side="right", fill="both", expand=True, padx=20, pady=10)
 
         # Inicializa o banco de dados
-        self.db = Database()  # Cria uma instância da classe Database
-        
+        self.db = Database()
+
         # Adicionando a lista de aniversariantes
         self.criar_lista_aniversariantes()
 
@@ -59,7 +61,26 @@ class JanelaPrincipal:
             botao.pack(pady=10, padx=40, fill="x")
 
     def acao_botao(self, texto):
-        messagebox.showinfo("Ação do Botão", f"Você clicou em: {texto}")
+        if texto == "Cadastro de Funcionários":
+            self.abrir_janela_secundaria(App, "Cadastro de Funcionários")
+        elif texto == "Registro de Ocorrências":
+            self.abrir_janela_secundaria(RegistroOcorrencias, "Registro de Ocorrências")
+        else:
+            messagebox.showinfo("Ação do Botão", f"Você clicou em: {texto}")
+
+    def abrir_janela_secundaria(self, JanelaClasse, titulo):
+        self.root.withdraw()  # Oculta a janela principal
+
+        # Instancia a classe e acessa sua janela principal
+        janela_secundaria = JanelaClasse()
+        janela_secundaria.root.protocol("WM_DELETE_WINDOW", lambda: self.fechar_janela_secundaria(janela_secundaria.root))
+        janela_secundaria.root.mainloop()
+
+
+    def fechar_janela_secundaria(self, janela):
+        janela.destroy()  # Fecha a janela secundária
+        self.root.deiconify()  # Reexibe a janela principal
+        
 
     def criar_lista_aniversariantes(self):
         # Título da lista
@@ -72,22 +93,16 @@ class JanelaPrincipal:
 
         # Busca todos os funcionários
         funcionarios = self.db.buscar_todos()
-        #print(f"Funcionários------------------------------------: {funcionarios}")
-        
+
         # Filtra os aniversariantes do mês
         for funcionario in funcionarios:
             nome = funcionario[1]
             data_nascimento = funcionario[9]  # Verifique se esta é a posição correta para a data de nascimento
-            
-            # Verifica se a data de nascimento não está vazia
+
             if data_nascimento:
                 try:
-                    # Converte a data de nascimento para o formato correto
                     ano_nascimento, mes_nascimento, dia_nascimento = map(int, data_nascimento.split('-'))
-                    
-                    # Verifica se o mês é igual e se o dia é igual
                     if mes_nascimento == mes_atual:
-                        # Formata a data de aniversário para DD/MM
                         data_formatada = f"{dia_nascimento:02}/{mes_nascimento:02}"
                         emoji = "_  🎉 🎂  Parabéns!!!" if dia_nascimento == dia_atual else ""
                         ctk.CTkLabel(self.frame_aniversariantes, text=f"{nome}  _  {data_formatada}   {emoji}", fg_color="transparent").pack(anchor="w", padx=10)
