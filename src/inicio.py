@@ -51,8 +51,8 @@ class JanelaPrincipal:
             "Registro de Desligamentos",
             "Capacitação e Competências",
             "Medidas Disciplinares",
+            "Relatórios",
             "Configurações",
-            "Ajuda",
             "Sair"
         ]
 
@@ -65,6 +65,8 @@ class JanelaPrincipal:
             self.abrir_janela_secundaria(App, "Cadastro de Funcionários")
         elif texto == "Registro de Ocorrências":
             self.abrir_janela_secundaria(RegistroOcorrencias, "Registro de Ocorrências")
+        elif texto == "Sair":
+            self.root.quit()
         else:
             messagebox.showinfo("Ação do Botão", f"Você clicou em: {texto}")
 
