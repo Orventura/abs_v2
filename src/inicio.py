@@ -5,6 +5,7 @@ from database import Database  # Certifique-se de que esta classe está corretam
 from app import App  # Certifique-se de que esta classe está corretamente implementada
 from page_2 import RegistroOcorrencias  # Certifique-se de que esta classe está corretamente implementada
 from ferias import RegistroFerias  # Certifique-se de que esta classe está corretamente implementada
+from configuracoes import Configuracoes  # Certifique-se de que esta classe está corretamente implementada
 
 class JanelaPrincipal:
     def __init__(self):
@@ -68,6 +69,8 @@ class JanelaPrincipal:
             self.abrir_janela_top_2(RegistroOcorrencias, "Registro de Ocorrências")
         elif texto == "Registro de Férias":
             self.abrir_janela_top_2(RegistroFerias, "Registro de Férias")
+        elif texto == "Configurações":
+            self.abrir_janela_top_2(Configuracoes, "Configurações")
         elif texto == "Sair":
             self.root.quit()
         else:

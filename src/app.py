@@ -36,6 +36,7 @@ class App:
         
         # Criar os elementos do formulário
         self.criar_formulario()
+        self.carregar_configuracoes()
         
     def criar_frames(self):
         # Frame principal (agora fixo, não scrollable)
@@ -154,10 +155,7 @@ class App:
                 frame_setor = ctk.CTkFrame(frame_linha3, fg_color='black')
                 frame_setor.pack(side="left", fill="x", expand=True, padx=5)
                 ctk.CTkLabel(frame_setor, text="Setor").pack(anchor="w", padx=5, pady=(5,0))
-                self.entradas['setor'] = ctk.CTkComboBox(frame_setor,
-                    values=["Recebimento", "Expedição"],
-
-                )
+                self.entradas['setor'] = ctk.CTkComboBox(frame_setor, values=self.ler_arquivo('setores.txt'))
                 self.entradas['setor'].pack(fill="x", padx=5, pady=(0,5))
                 
                 # Observação
@@ -237,8 +235,8 @@ class App:
                 # Líder
                 frame_lider = ctk.CTkFrame(frame_linha5, fg_color='black')
                 frame_lider.pack(side="left", fill="x", expand=True, padx=5)
-                ctk.CTkLabel(frame_lider, text="Líder").pack(anchor="w", padx=5, pady=(5,0))
-                self.entradas['lider'] = ctk.CTkEntry(frame_lider)
+                ctk.CTkLabel(frame_lider, text="Líder - Gestor").pack(anchor="w", padx=5, pady=(5,0))
+                self.entradas['lider'] = ctk.CTkComboBox(frame_lider, values=self.ler_arquivo('lideres.txt'))
                 self.entradas['lider'].pack(fill="x", padx=5, pady=(0,5))
                 
             elif titulo == "Contatos e Outros":
@@ -471,9 +469,7 @@ class App:
             self.entradas['empresa'].set(funcionario[4])
             self.entradas['turno'].set(funcionario[5])
             self.entradas['area'].set(funcionario[6])
-            
-            self.entradas['lider'].delete(0, 'end')
-            self.entradas['lider'].insert(0, funcionario[7])
+            self.entradas['lider'].set(funcionario[7])
             
             # Converter string para data
             dt_admissao = datetime.strptime(funcionario[8], '%Y-%m-%d')
@@ -523,6 +519,52 @@ class App:
             
         except Exception as e:
             self.mostrar_mensagem("Erro", f"Erro ao carregar dados do funcionário: {str(e)}")
+
+    def ler_arquivo(self, nome_arquivo):
+        """Lê o arquivo de configuração e retorna seus valores"""
+        try:
+            config_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config')
+            caminho = os.path.join(config_dir, nome_arquivo)
+            if os.path.exists(caminho):
+                with open(caminho, 'r', encoding='utf-8') as f:
+                    return [linha.strip() for linha in f.readlines() if linha.strip()]
+            return []
+        except Exception as e:
+            print(f"Erro ao ler arquivo {nome_arquivo}: {str(e)}")
+            return []
+
+    def atualizar_comboboxes(self):
+        """Atualiza os valores das ComboBoxes"""
+        self.entradas['setor'].configure(values=self.ler_arquivo('setores.txt'))
+        self.entradas['empresa'].configure(values=self.ler_arquivo('empresas.txt'))
+        self.entradas['turno'].configure(values=self.ler_arquivo('turnos.txt'))
+        self.entradas['area'].configure(values=self.ler_arquivo('areas.txt'))
+        self.entradas['colete'].configure(values=self.ler_arquivo('coletes.txt'))
+        self.entradas['observacao'].configure(values=self.ler_arquivo('observacoes.txt'))
+        self.entradas['lider'].configure(values=self.ler_arquivo('lideres.txt'))
+
+    def carregar_configuracoes(self):
+        """Carrega as configurações iniciais"""
+        config_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config')
+        
+        def ler_arquivo(nome):
+            try:
+                caminho = os.path.join(config_dir, nome)
+                if os.path.exists(caminho):
+                    with open(caminho, 'r', encoding='utf-8') as f:
+                        return [linha.strip() for linha in f.readlines() if linha.strip()]
+                return []
+            except Exception:
+                return []
+        
+        # Atualizar as ComboBox com os valores dos arquivos
+        self.entradas['setor'].configure(values=ler_arquivo('setores.txt'))
+        self.entradas['area'].configure(values=ler_arquivo('areas.txt'))
+        self.entradas['empresa'].configure(values=ler_arquivo('empresas.txt'))
+        self.entradas['turno'].configure(values=ler_arquivo('turnos.txt'))
+        self.entradas['colete'].configure(values=ler_arquivo('coletes.txt'))
+        self.entradas['observacao'].configure(values=ler_arquivo('observacoes.txt'))
+        self.entradas['lider'].configure(values=ler_arquivo('lideres.txt'))
 
 if __name__ == "__main__":
     app = App()
