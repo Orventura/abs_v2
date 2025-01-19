@@ -164,7 +164,7 @@ class App:
                 ctk.CTkLabel(frame_obs, text="Observação").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['observacao'] = ctk.CTkComboBox(
                     frame_obs,
-                    values=["Afastado", "Ativo"]
+                    values=self.ler_arquivo('observacoes.txt')
                 )
                 self.entradas['observacao'].pack(fill="x", padx=5, pady=(0,5))
                 
@@ -204,7 +204,7 @@ class App:
                 ctk.CTkLabel(frame_turno, text="Turno").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['turno'] = ctk.CTkComboBox(
                     frame_turno,
-                    values=["A", "B", "C", "ADM1", "ADM2"]
+                    values=self.ler_arquivo('turnos.txt')
                 )
                 self.entradas['turno'].pack(fill="x", padx=5, pady=(0,5))
                 
@@ -218,7 +218,7 @@ class App:
                 ctk.CTkLabel(frame_area, text="Área").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['area'] = ctk.CTkComboBox(
                     frame_area,
-                    values=["A1", "A2", "A3", "B1", "ADM"]
+                    values=self.ler_arquivo('areas.txt')
                 )
                 self.entradas['area'].pack(fill="x", padx=5, pady=(0,5))
                 
@@ -228,7 +228,7 @@ class App:
                 ctk.CTkLabel(frame_empresa, text="Empresa").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['empresa'] = ctk.CTkComboBox(
                     frame_empresa,
-                    values=["PHILCO", "BRIC", "HUNT", "FENIX"]
+                    values=self.ler_arquivo('empresas.txt')
                 )
                 self.entradas['empresa'].pack(fill="x", padx=5, pady=(0,5))
                 
@@ -250,7 +250,7 @@ class App:
                 ctk.CTkLabel(frame_colete, text="Colete").pack(anchor="w", padx=5, pady=(5,0))
                 self.entradas['colete'] = ctk.CTkComboBox(
                     frame_colete,
-                    values=["PP", "P", "M", "G", "GG"]
+                    values=self.ler_arquivo('coletes.txt')
                 )
                 self.entradas['colete'].pack(fill="x", padx=5, pady=(0,5))
                 
