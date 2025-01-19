@@ -49,8 +49,6 @@ class JanelaPrincipal:
             "Cadastro de Funcionários",
             "Registro de Ocorrências",
             "Registro de Férias",
-            "Registro de Afastamentos",
-            "Registro de Desligamentos",
             "Capacitação e Competências",
             "Medidas Disciplinares",
             "Relatórios",
@@ -74,7 +72,7 @@ class JanelaPrincipal:
         elif texto == "Sair":
             self.root.quit()
         else:
-            messagebox.showinfo("Ação do Botão", f"Você clicou em: {texto}")
+            messagebox.showinfo("Em Desenvolvimento", "Aguarde a próxima versão do sistema")
 
     def abrir_janela_top_2(self, JanelaClasse, titulo):
         self.root.withdraw()  # Oculta a janela principal

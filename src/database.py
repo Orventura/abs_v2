@@ -163,12 +163,19 @@ class Database:
         return self.cursor.fetchall()
 
     def atualizar_ferias(self, dados):
-        self.cursor.execute("""
-        UPDATE ferias 
-        SET nome=?, funcao=?, cc=?, desc_cc=?, dt_admissao=?,
-            dt_inicio=?, dt_retorno=?, dias_gozo=?
-        WHERE matricula=?
-        """, dados)
+        query = """
+            UPDATE ferias 
+            SET nome = ?, 
+                funcao = ?, 
+                cc = ?, 
+                desc_cc = ?, 
+                dt_admissao = ?, 
+                dt_inicio = ?, 
+                dt_retorno = ?, 
+                dias_gozo = ?
+            WHERE matricula = ?
+        """
+        self.cursor.execute(query, dados)
         self.conn.commit()
 
     def deletar_ferias(self, id):

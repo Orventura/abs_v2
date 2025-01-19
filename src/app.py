@@ -344,8 +344,8 @@ class App:
         # Cria um dicionário com os dados das entradas
         dados = {
             'mat': self.entradas['mat'].get(),
-            'nome': self.entradas['nome'].get(),
-            'cargo': self.entradas['cargo'].get(),
+            'nome': self.entradas['nome'].get().upper(),
+            'cargo': self.entradas['cargo'].get().upper(),
             'setor': self.entradas['setor'].get(),
             'empresa': self.entradas['empresa'].get(),
             'turno': self.entradas['turno'].get(),
@@ -354,17 +354,17 @@ class App:
             'dt_admissao': self.entradas['dt_admissao'].get_date().strftime('%Y-%m-%d'),
             'dt_nascimento': self.entradas['dt_nascimento'].get_date().strftime('%Y-%m-%d'),
             'cpf': self.entradas['cpf'].get(),
-            'email': self.entradas['email'].get(),
-            'endereco': self.entradas['endereco'].get(),
-            'bairro': self.entradas['bairro'].get(),
-            'referencia': self.entradas['referencia'].get(),
+            'email': self.entradas['email'].get().lower(),
+            'endereco': self.entradas['endereco'].get().upper(),
+            'bairro': self.entradas['bairro'].get().upper(),
+            'referencia': self.entradas['referencia'].get().upper(),
             'telefone': self.entradas['telefone'].get(),
             'tel_recado': self.entradas['tel_recado'].get(),
             'num_rota': self.entradas['num_rota'].get(),
             'colete': self.entradas['colete'].get(),
             'sapato': self.entradas['sapato'].get(),
-            'pcd': "Sim" if self.entradas['pcd'].get() else "Não",
-            'observacao': self.entradas['observacao'].get()
+            'pcd': "SIM" if self.entradas['pcd'].get() else "NÃO",
+            'observacao': self.entradas['observacao'].get().upper()
         }
         
         # Validar campos obrigatórios
