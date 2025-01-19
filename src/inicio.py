@@ -4,6 +4,7 @@ from datetime import datetime
 from database import Database  # Certifique-se de que esta classe está corretamente implementada
 from app import App  # Certifique-se de que esta classe está corretamente implementada
 from page_2 import RegistroOcorrencias  # Certifique-se de que esta classe está corretamente implementada
+from ferias import RegistroFerias  # Certifique-se de que esta classe está corretamente implementada
 
 class JanelaPrincipal:
     def __init__(self):
@@ -62,24 +63,26 @@ class JanelaPrincipal:
 
     def acao_botao(self, texto):
         if texto == "Cadastro de Funcionários":
-            self.abrir_janela_secundaria(App, "Cadastro de Funcionários")
+            self.abrir_janela_top_2(App, "Cadastro de Funcionários")
         elif texto == "Registro de Ocorrências":
-            self.abrir_janela_secundaria(RegistroOcorrencias, "Registro de Ocorrências")
+            self.abrir_janela_top_2(RegistroOcorrencias, "Registro de Ocorrências")
+        elif texto == "Registro de Férias":
+            self.abrir_janela_top_2(RegistroFerias, "Registro de Férias")
         elif texto == "Sair":
             self.root.quit()
         else:
             messagebox.showinfo("Ação do Botão", f"Você clicou em: {texto}")
 
-    def abrir_janela_secundaria(self, JanelaClasse, titulo):
+    def abrir_janela_top_2(self, JanelaClasse, titulo):
         self.root.withdraw()  # Oculta a janela principal
 
         # Instancia a classe e acessa sua janela principal
-        janela_secundaria = JanelaClasse()
-        janela_secundaria.root.protocol("WM_DELETE_WINDOW", lambda: self.fechar_janela_secundaria(janela_secundaria.root))
-        janela_secundaria.root.mainloop()
+        janela_top_2 = JanelaClasse()
+        janela_top_2.root.protocol("WM_DELETE_WINDOW", lambda: self.fechar_janela_top_2(janela_top_2.root))
+        janela_top_2.root.mainloop()
 
 
-    def fechar_janela_secundaria(self, janela):
+    def fechar_janela_top_2(self, janela):
         janela.destroy()  # Fecha a janela secundária
         self.root.deiconify()  # Reexibe a janela principal
         

@@ -66,6 +66,23 @@ class Database:
         )
         """)
         
+        # Tabela de férias
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS ferias (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            matricula TEXT NOT NULL,
+            nome TEXT NOT NULL,
+            funcao TEXT NOT NULL,
+            cc TEXT,
+            desc_cc TEXT,
+            dt_admissao TEXT NOT NULL,
+            dt_inicio TEXT NOT NULL,
+            dt_retorno TEXT NOT NULL,
+            dias_gozo INTEGER NOT NULL,
+            FOREIGN KEY (matricula) REFERENCES funcionarios(mat)
+        )
+        """)
+        
         self.conn.commit()
     
     def inserir(self, dados):
@@ -129,6 +146,44 @@ class Database:
             self.cursor.execute("SELECT * FROM ocorrencias")
         return self.cursor.fetchall()
     
+    def inserir_ferias(self, dados):
+        self.cursor.execute("""
+        INSERT INTO ferias (
+            matricula, nome, funcao, cc, desc_cc,
+            dt_admissao, dt_inicio, dt_retorno, dias_gozo
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, dados)
+        self.conn.commit()
+
+    def buscar_ferias(self, matricula=None):
+        if matricula:
+            self.cursor.execute("SELECT * FROM ferias WHERE matricula = ?", (matricula,))
+        else:
+            self.cursor.execute("SELECT * FROM ferias")
+        return self.cursor.fetchall()
+
+    def atualizar_ferias(self, dados):
+        self.cursor.execute("""
+        UPDATE ferias 
+        SET nome=?, funcao=?, cc=?, desc_cc=?, dt_admissao=?,
+            dt_inicio=?, dt_retorno=?, dias_gozo=?
+        WHERE matricula=?
+        """, dados)
+        self.conn.commit()
+
+    def deletar_ferias(self, id):
+        self.cursor.execute("DELETE FROM ferias WHERE id=?", (id,))
+        self.conn.commit()
+
+    def buscar_ferias_funcionario(self, matricula):
+        self.cursor.execute("""
+        SELECT cc, desc_cc, dt_inicio, dt_retorno, dias_gozo 
+        FROM ferias 
+        WHERE matricula = ? 
+        ORDER BY dt_inicio DESC 
+        LIMIT 1""", (matricula,))
+        return self.cursor.fetchone()
+
     def __del__(self):
         self.conn.close()
 
@@ -236,5 +291,6 @@ def teste_banco():
         print(f"❌ Erro ao remover banco de dados de teste: {e}")
 
 if __name__ == "__main__":
+    db = Database()
     teste_banco()
     
