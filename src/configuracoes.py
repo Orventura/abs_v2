@@ -9,7 +9,7 @@ class Configuracoes:
         ctk.set_default_color_theme("blue")
         self.root = ctk.CTk()
         self.root.title("Configurações")
-        self.root.geometry("600x700") 
+        self.root.geometry("750x700") 
         self.root.configure(fg_color='black')    # Ajustado para melhor visualização em duas colunas
         
         # Diretório para os arquivos de configuração
@@ -24,7 +24,9 @@ class Configuracoes:
             'Turnos': 'turnos.txt',
             'Coletes': 'coletes.txt',
             'Observações': 'observacoes.txt',
-            'Líderes': 'lideres.txt'
+            'Líderes': 'lideres.txt',
+            'Centro de Custo': 'centro_custo.txt',
+            'Desc Centro de Custo': 'desc_cc.txt'
         }
         
         self.criar_interface()
@@ -41,24 +43,34 @@ class Configuracoes:
         # Criar campos para cada configuração
         self.text_widgets = {}
         
-        # Lista de configurações para dividir em duas colunas
+        # Lista de configurações para dividir em três colunas
         configs_list = list(self.configs.items())
-        mid_point = len(configs_list) // 2
+        items_per_column = len(configs_list) // 3
+        if len(configs_list) % 3:
+            items_per_column += 1
         
         # Frame para a coluna esquerda
         left_frame = ctk.CTkFrame(config_frame, fg_color='black', border_width=1, border_color='white')
         left_frame.pack(side="left", fill="both", expand=True, padx=5)
         
+        # Frame para a coluna do meio
+        middle_frame = ctk.CTkFrame(config_frame, fg_color='black', border_width=1, border_color='white')
+        middle_frame.pack(side="left", fill="both", expand=True, padx=5)
+        
         # Frame para a coluna direita
         right_frame = ctk.CTkFrame(config_frame, fg_color='black', border_width=1, border_color='white')
-        right_frame.pack(side="right", fill="both", expand=True, padx=5)
+        right_frame.pack(side="left", fill="both", expand=True, padx=5)
         
         # Criar widgets para a coluna esquerda
-        for titulo, arquivo in configs_list[:mid_point]:
+        for titulo, arquivo in configs_list[:items_per_column]:
             self.criar_widget_configuracao(left_frame, titulo, arquivo)
         
+        # Criar widgets para a coluna do meio
+        for titulo, arquivo in configs_list[items_per_column:items_per_column*2]:
+            self.criar_widget_configuracao(middle_frame, titulo, arquivo)
+        
         # Criar widgets para a coluna direita
-        for titulo, arquivo in configs_list[mid_point:]:
+        for titulo, arquivo in configs_list[items_per_column*2:]:
             self.criar_widget_configuracao(right_frame, titulo, arquivo)
         
         # Frame para os botões
@@ -70,7 +82,9 @@ class Configuracoes:
             button_frame,
             text="Salvar",
             command=self.salvar_todas_configuracoes,
-            width=120
+            width=120,
+            fg_color="#1f538d",
+            hover_color="#14375e"
         ).pack(side="left", padx=5, expand=True)
            
     def criar_widget_configuracao(self, parent_frame, titulo, arquivo):
@@ -82,11 +96,11 @@ class Configuracoes:
         ctk.CTkLabel(
             frame,
             text=titulo,
-            font=("Roboto", 14, "bold")
+            font=("Roboto", 12, "bold")
         ).pack(anchor="w", padx=5, pady=2)
         
         # Campo de texto
-        text_widget = ctk.CTkTextbox(frame, height=100)
+        text_widget = ctk.CTkTextbox(frame, height=80)  # Reduzido a altura para melhor distribuição
         text_widget.pack(fill="x", padx=5, pady=(0, 5))
         
         # Carregar conteúdo existente

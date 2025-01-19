@@ -6,6 +6,7 @@ from app import App  # Certifique-se de que esta classe está corretamente imple
 from page_2 import RegistroOcorrencias  # Certifique-se de que esta classe está corretamente implementada
 from ferias import RegistroFerias  # Certifique-se de que esta classe está corretamente implementada
 from configuracoes import Configuracoes  # Certifique-se de que esta classe está corretamente implementada
+from relatorios import Relatorios  # Certifique-se de que esta classe está corretamente implementada
 
 class JanelaPrincipal:
     def __init__(self):
@@ -71,6 +72,8 @@ class JanelaPrincipal:
             self.abrir_janela_top_2(Configuracoes, "Configurações")
         elif texto == "Sair":
             self.root.quit()
+        elif texto == "Relatórios":
+            self.abrir_janela_top_2(Relatorios, "Relatórios")
         else:
             messagebox.showinfo("Em Desenvolvimento", "Aguarde a próxima versão do sistema")
 
