@@ -5,8 +5,10 @@ from registro_desligamento import RegistroDesligamento
 
 class Relatorios:
     def __init__(self):
+        
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
+
         self.root = ctk.CTk()
         self.root.title("Relatórios")
         self.root.geometry("600x400")

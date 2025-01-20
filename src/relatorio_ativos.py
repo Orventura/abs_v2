@@ -2,22 +2,42 @@ import customtkinter as ctk
 from tkinter import ttk
 from database import Database
 import tkinter as tk
+import platform
 
 class RelatorioAtivos:
     def __init__(self):
+
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
+
         self.db = Database()
         
         # Configurações da janela
         self.root = ctk.CTk()
         self.root.title("Relatório - Colaboradores Ativos")
-        self.root.geometry("1200x600")
-        self.root.configure(fg_color='black')
         
+        # Identificar o sistema operacional e maximizar a janela
+        sistema = platform.system().lower()
+        if sistema == "windows":
+            self.root.state('zoomed')
+        elif sistema == "linux":
+            self.root.attributes('-zoomed', True)
+        elif sistema == "darwin":  # macOS
+            self.root.attributes('-fullscreen', True)
+        
+        self.root.configure(fg_color='black')
+
+        # Frame para o Titulo
+        self.titulo_frame = ctk.CTkFrame(self.root, fg_color="black")
+        self.titulo_frame.pack(expand=False, fill="both", padx=10, pady=10)
+
         # Frame principal
         self.main_frame = ctk.CTkFrame(self.root, fg_color="black", border_width=1, border_color="white")
-        self.main_frame.pack(expand=True, fill="both", padx=10, pady=10)
+        self.main_frame.pack(expand="yes", fill="both", padx=10, pady=10)
+
+        # Label para o Titulo
+        self.titulo_label = ctk.CTkLabel(self.titulo_frame, text="Colaboradores Ativos", font=("Roboto", 16, "bold"))
+        self.titulo_label.pack(pady=10)
         
         # Frame para o Treeview
         self.tree_frame = ctk.CTkFrame(self.main_frame, fg_color="black")
@@ -31,6 +51,8 @@ class RelatorioAtivos:
         
         # Botões
         self.criar_botoes()
+
+        self.info_total()
         
     def criar_treeview(self):
         # Estilo para o Treeview
@@ -52,21 +74,28 @@ class RelatorioAtivos:
         self.tree = ttk.Treeview(self.tree_frame, style="Treeview")
         
         # Definir colunas
-        self.tree["columns"] = ("Matrícula", "Nome", "Cargo", "Setor", "Empresa", 
-                               "Turno", "Área", "Líder", "Admissão")
+        self.tree["columns"] = ("Matrícula", "Nome", "PCD", "Cargo", "Setor", "Empresa", 
+                               "Turno", "Área", "Líder", "Admissão", "Telefone", "Endereço", "Bairro", "Referência", "Rota", "Colete", "Sapato")
         
         # Formatação das colunas
         self.tree.column("#0", width=0, stretch=False)
         self.tree.column("Matrícula", width=80, anchor="center")
-        self.tree.column("Nome", width=200, anchor="w")
-        self.tree.column("Cargo", width=150, anchor="w")
-        self.tree.column("Setor", width=120, anchor="w")
-        self.tree.column("Empresa", width=120, anchor="w")
-        self.tree.column("Turno", width=100, anchor="w")
-        self.tree.column("Área", width=120, anchor="w")
-        self.tree.column("Líder", width=150, anchor="w")
+        self.tree.column("Nome", width=200, anchor="center")
+        self.tree.column("PCD", width=150, anchor="center")
+        self.tree.column("Cargo", width=150, anchor="center")
+        self.tree.column("Setor", width=120, anchor="center")
+        self.tree.column("Empresa", width=120, anchor="center")
+        self.tree.column("Turno", width=100, anchor="center")
+        self.tree.column("Área", width=120, anchor="center")
+        self.tree.column("Líder", width=150, anchor="center")
         self.tree.column("Admissão", width=100, anchor="center")
-        
+        self.tree.column("Telefone", width=100, anchor="center")
+        self.tree.column("Endereço", width=100, anchor="center")
+        self.tree.column("Bairro", width=100, anchor="center")
+        self.tree.column("Referência", width=100, anchor="center")
+        self.tree.column("Rota", width=100, anchor="center")
+        self.tree.column("Colete", width=100, anchor="center")
+        self.tree.column("Sapato", width=100, anchor="center")
         # Cabeçalhos
         for col in self.tree["columns"]:
             self.tree.heading(col, text=col, anchor="center")
@@ -91,7 +120,7 @@ class RelatorioAtivos:
             
         # Buscar funcionários ativos
         query = """
-        SELECT mat, nome, cargo, setor, empresa, turno, area, lider, dt_admissao 
+        SELECT mat, nome, pcd, cargo, setor, empresa, turno, area, lider, dt_admissao, telefone, endereco, bairro, referencia, num_rota, colete, sapato
         FROM funcionarios 
         WHERE UPPER(observacoes) NOT IN ('AFASTADO', 'DESLIGADO', 'FÉRIAS', 'FERIAS')
         ORDER BY nome
@@ -104,12 +133,13 @@ class RelatorioAtivos:
             self.tree.insert("", "end", values=func)
             
     def criar_botoes(self):
-        botoes_frame = ctk.CTkFrame(self.main_frame, fg_color="#000000")
-        botoes_frame.pack(fill="x", padx=10, pady=10)
+        # Frame para os botões
+        frame_botoes = ctk.CTkFrame(self.root, fg_color="#000000")
+        frame_botoes.pack(fill="x", padx=10, pady=10)
         
         # Botão Atualizar
         ctk.CTkButton(
-            botoes_frame,
+            frame_botoes,
             text="Atualizar",
             command=self.carregar_dados,
             width=120,
@@ -119,7 +149,7 @@ class RelatorioAtivos:
         
         # Botão Exportar (para futura implementação)
         ctk.CTkButton(
-            botoes_frame,
+            frame_botoes,
             text="Exportar",
             command=self.exportar_dados,
             width=120,
@@ -130,6 +160,18 @@ class RelatorioAtivos:
     def exportar_dados(self):
         # Implementação futura para exportar dados
         pass
+
+    def info_total(self):
+        query = """
+        SELECT COUNT(*) FROM funcionarios WHERE UPPER(observacoes) NOT IN ('AFASTADO', 'DESLIGADO', 'FÉRIAS', 'FERIAS')
+        """
+        self.db.cursor.execute(query)
+        total = self.db.cursor.fetchone()[0]
+
+        frame_info = ctk.CTkFrame(self.main_frame, fg_color="black")
+        frame_info.pack(expand=False, fill="both", padx=10, pady=10)
+
+        ctk.CTkLabel(frame_info, text=f"Total de Colaboradores Ativos: {total}", font=("Roboto", 12, "bold")).pack(pady=10)
 
 if __name__ == "__main__":
     app = RelatorioAtivos()

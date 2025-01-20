@@ -7,7 +7,7 @@ from page_2 import RegistroOcorrencias  # Certifique-se de que esta classe está
 from ferias import RegistroFerias  # Certifique-se de que esta classe está corretamente implementada
 from configuracoes import Configuracoes  # Certifique-se de que esta classe está corretamente implementada
 from relatorios import Relatorios  # Certifique-se de que esta classe está corretamente implementada
-
+from registro_desligamento import RegistroDesligamento  # Certifique-se de que esta classe está corretamente implementada
 class JanelaPrincipal:
     def __init__(self):
         # Configurações gerais do CustomTkinter
@@ -69,6 +69,8 @@ class JanelaPrincipal:
             self.abrir_janela_top_2(RegistroOcorrencias, "Registro de Ocorrências")
         elif texto == "Registro de Férias":
             self.abrir_janela_top_2(RegistroFerias, "Registro de Férias")
+        elif texto == "Registro de Desligamentos":
+            self.abrir_janela_top_2(RegistroDesligamento, "Registro de Desligamentos")
         elif texto == "Configurações":
             self.abrir_janela_top_2(Configuracoes, "Configurações")
         elif texto == "Sair":
@@ -79,7 +81,7 @@ class JanelaPrincipal:
             messagebox.showinfo("Em Desenvolvimento", "Aguarde a próxima versão do sistema")
 
     def abrir_janela_top_2(self, JanelaClasse, titulo):
-        self.root.withdraw()  # Oculta a janela principal
+        self.root.withdraw()
 
         # Instancia a classe e acessa sua janela principal
         janela_top_2 = JanelaClasse()
@@ -88,8 +90,10 @@ class JanelaPrincipal:
 
 
     def fechar_janela_top_2(self, janela):
-        janela.destroy()  # Fecha a janela secundária
-        self.root.deiconify()  # Reexibe a janela principal
+        janela.destroy()
+        self.root.deiconify()
+        self.root.mainloop()
+
         
 
     def criar_lista_aniversariantes(self):

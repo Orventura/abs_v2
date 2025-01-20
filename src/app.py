@@ -8,11 +8,14 @@ from components import Validacoes
 import os
 import platform
 
-# Configurar locale para português
-if platform.system() == "Windows":
-    locale.setlocale(locale.LC_ALL, 'portuguese')  # Ajuste para Windows
-else:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')  # Linux
+try:
+    if platform.system() == "Windows":
+        locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil.1252')
+    else:
+        locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+except:
+    print("Erro ao configurar locale. Usando configuração padrão.")
+
 
 class App:
     def __init__(self):
