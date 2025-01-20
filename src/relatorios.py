@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
+from relatorio_ativos import RelatorioAtivos
+from registro_desligamento import RegistroDesligamento
 
 class Relatorios:
     def __init__(self):
@@ -32,6 +34,7 @@ class Relatorios:
             "ColaboradoresAfastados",
             "Faltas e Atrasos",
             "Férias",
+            "Registro de Desligamento",
         ]
 
         for texto in botoes:
@@ -41,10 +44,22 @@ class Relatorios:
 
 
     def acao_botao(self, texto):
-        if texto == "a":
-            pass
+        if texto == "Colaboradores Ativos":
+            self.root.withdraw()
+            relatorio = RelatorioAtivos()
+            relatorio.root.protocol("WM_DELETE_WINDOW", lambda: self.fechar_relatorio(relatorio))
+            relatorio.root.mainloop()
+        elif texto == "Registro de Desligamento":
+            self.root.withdraw()
+            registro = RegistroDesligamento()
+            registro.root.protocol("WM_DELETE_WINDOW", lambda: self.fechar_relatorio(registro))
+            registro.root.mainloop()
         else:
             messagebox.showinfo("Em Desenvolvimento", "Aguarde a próxima versão do sistema")
+
+    def fechar_relatorio(self, relatorio):
+        relatorio.root.destroy()
+        self.root.deiconify()  # Mostra a janela principal novamente
 
 
 if __name__ == "__main__":

@@ -49,6 +49,7 @@ class JanelaPrincipal:
         botoes = [
             "Cadastro de Funcionários",
             "Registro de Ocorrências",
+            "Registro de Desligamentos",
             "Registro de Férias",
             "Capacitação e Competências",
             "Medidas Disciplinares",

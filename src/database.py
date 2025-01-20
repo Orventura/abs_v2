@@ -83,6 +83,38 @@ class Database:
         )
         """)
         
+        # Tabela de desligados atualizada
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS desligados (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            matricula TEXT NOT NULL,
+            nome TEXT NOT NULL,
+            cargo TEXT,
+            setor TEXT,
+            empresa TEXT,
+            turno TEXT,
+            area TEXT,
+            lider TEXT,
+            dt_admissao TEXT,
+            dt_nascimento TEXT,
+            cpf TEXT,
+            email TEXT,
+            endereco TEXT,
+            bairro TEXT,
+            referencia TEXT,
+            telefone TEXT,
+            tel_recado TEXT,
+            num_rota TEXT,
+            colete TEXT,
+            sapato TEXT,
+            pcd TEXT,
+            observacoes TEXT,
+            dt_desligamento TEXT NOT NULL,
+            motivo_desligamento TEXT NOT NULL,
+            observacao_desligamento TEXT
+        )
+        """)
+        
         self.conn.commit()
     
     def inserir(self, dados):
@@ -190,6 +222,62 @@ class Database:
         ORDER BY dt_inicio DESC 
         LIMIT 1""", (matricula,))
         return self.cursor.fetchone()
+
+    def inserir_desligamento(self, dados_funcionario, motivo, observacao):
+        """
+        Insere um novo registro na tabela de desligados com todos os dados do funcionário
+        e as informações do desligamento
+        """
+        # Busca todos os dados do funcionário
+        self.cursor.execute("SELECT * FROM funcionarios WHERE mat=?", (dados_funcionario[0],))
+        funcionario = self.cursor.fetchone()
+        
+        if funcionario:
+            # Prepara os dados para inserção incluindo todos os campos do funcionário
+            dados_desligamento = (
+                funcionario[0],  # matricula
+                funcionario[1],  # nome
+                funcionario[2],  # cargo
+                funcionario[3],  # setor
+                funcionario[4],  # empresa
+                funcionario[5],  # turno
+                funcionario[6],  # area
+                funcionario[7],  # lider
+                funcionario[8],  # dt_admissao
+                funcionario[9],  # dt_nascimento
+                funcionario[10], # cpf
+                funcionario[11], # email
+                funcionario[12], # endereco
+                funcionario[13], # bairro
+                funcionario[14], # referencia
+                funcionario[15], # telefone
+                funcionario[16], # tel_recado
+                funcionario[17], # num_rota
+                funcionario[18], # colete
+                funcionario[19], # sapato
+                funcionario[20], # pcd
+                "DESLIGADO",     # observacoes
+                datetime.now().strftime('%Y-%m-%d'),  # dt_desligamento
+                motivo.upper(),  # motivo_desligamento
+                observacao.upper() if observacao else None  # observacao_desligamento
+            )
+            
+            self.cursor.execute("""
+            INSERT INTO desligados (
+                matricula, nome, cargo, setor, empresa, turno, area, lider,
+                dt_admissao, dt_nascimento, cpf, email, endereco, bairro,
+                referencia, telefone, tel_recado, num_rota, colete, sapato,
+                pcd, observacoes, dt_desligamento, motivo_desligamento, 
+                observacao_desligamento
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, dados_desligamento)
+            
+            self.conn.commit()
+
+    def buscar_desligados(self):
+        """Busca todos os registros de desligados"""
+        self.cursor.execute("SELECT * FROM desligados")
+        return self.cursor.fetchall()
 
     def __del__(self):
         self.conn.close()
